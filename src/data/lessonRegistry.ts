@@ -41,7 +41,12 @@ import { returnValues } from "./worlds/01-coding-foundations/06-functions/04-ret
 import { variableScope } from "./worlds/01-coding-foundations/06-functions/05-variable-scope/lesson";
 import { combiningFunctions } from "./worlds/01-coding-foundations/06-functions/06-combining-functions/lesson";
 import { buildAMiniProgram } from "./worlds/01-coding-foundations/06-functions/07-build-a-mini-program/lesson";
-
+import { readingAFullProgram } from "./worlds/01-coding-foundations/07-putting-it-together/01-reading-a-full-program/lesson";
+import { tracingCode } from "./worlds/01-coding-foundations/07-putting-it-together/02-tracing-code/lesson";
+import { planningWithPseudocode } from "./worlds/01-coding-foundations/07-putting-it-together/03-planning-with-pseudocode/lesson";
+import { debugging } from "./worlds/01-coding-foundations/07-putting-it-together/04-debugging/lesson";
+import { finalProject } from "./worlds/01-coding-foundations/07-putting-it-together/05-final-project/lesson";
+import { worldMasteryQuiz } from "./worlds/01-coding-foundations/07-putting-it-together/06-world-mastery-quiz/lesson";
 
 
 
@@ -86,6 +91,12 @@ export const lessonRegistry: Record<string, Lesson> = {
   [variableScope.id]: variableScope,
   [combiningFunctions.id]: combiningFunctions,
   [buildAMiniProgram.id]: buildAMiniProgram,
+  [readingAFullProgram.id]: readingAFullProgram,
+  [tracingCode.id]: tracingCode,
+  [planningWithPseudocode.id]: planningWithPseudocode,
+  [debugging.id]: debugging,
+  [finalProject.id]: finalProject,
+  [worldMasteryQuiz.id]: worldMasteryQuiz,
 };
 
 
