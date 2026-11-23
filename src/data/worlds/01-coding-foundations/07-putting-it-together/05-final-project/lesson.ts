@@ -47,6 +47,58 @@ export const finalProject: Lesson = {
       },
       "explanation": "Great work!"
     },
+
+{
+  type: "code-builder",
+  title: "Build Your Own Arcade Game! 🕹️",
+  question:
+    "Build a mini arcade game! Create a function named addBonus that adds 10 points to a score. Start with 0 points, play 3 rounds earning 20 points each, then apply the bonus. If the final score is at least 70, display 'You win!'.",
+  codeBlocks: {
+    pseudo: [
+      "END IF",
+      'DISPLAY "You win!"',
+      "IF score >= 70 THEN",
+      "SET score = addBonus(score)",
+      "END FOR",
+      "SET score = score + 20",
+      "FOR i = 1 TO 3",
+      "SET score = 0",
+      "END FUNCTION",
+      "RETURN score + 10",
+      "FUNCTION addBonus(score)",
+    ],
+    c: [
+      "}",
+      'printf("You win!");',
+      "if (score >= 70) {",
+      "score = addBonus(score);",
+      "}",
+      "score += 20;",
+      "for (int i = 1; i <= 3; i++) {",
+      "int score = 0;",
+      "}",
+      "return score + 10;",
+      "int addBonus(int score) {",
+    ],
+    cpp: [
+      "}",
+      'cout << "You win!";',
+      "if (score >= 70) {",
+      "score = addBonus(score);",
+      "}",
+      "score += 20;",
+      "for (int i = 1; i <= 3; i++) {",
+      "int score = 0;",
+      "}",
+      "return score + 10;",
+      "int addBonus(int score) {",
+    ],
+  },
+  correctBlockOrder: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
+  explanation:
+    "The addBonus function adds 10 points. The game starts at 0 and earns 20 points during each of 3 rounds, reaching 60. Calling addBonus increases the score to 70. Since 70 is at least 70, the game displays 'You win!'. This combines functions, loops, arithmetic, variables, and conditions into one program!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

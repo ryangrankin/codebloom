@@ -47,6 +47,43 @@ export const debugging: Lesson = {
       },
       "explanation": "Great work!"
     },
+
+{
+  type: "code-builder",
+  title: "Fix the Broken Countdown! 🐛",
+  question:
+    "A countdown program is broken because its counter never changes, causing an infinite loop. Arrange the corrected code blocks to start at 5, display each number, decrease the counter by 1, and stop after displaying 1. Then display 'Blast off!'.",
+  codeBlocks: {
+    pseudo: [
+      'DISPLAY "Blast off!"',
+      "END WHILE",
+      "SET count = count - 1",
+      "DISPLAY count",
+      "WHILE count > 0",
+      "SET count = 5",
+    ],
+    c: [
+      'printf("Blast off!");',
+      "}",
+      "count--;",
+      'printf("%d\\n", count);',
+      "while (count > 0) {",
+      "int count = 5;",
+    ],
+    cpp: [
+      'cout << "Blast off!";',
+      "}",
+      "count--;",
+      "cout << count << endl;",
+      "while (count > 0) {",
+      "int count = 5;",
+    ],
+  },
+  correctBlockOrder: [5, 4, 3, 2, 1, 0],
+  explanation:
+    "The countdown starts at 5. The while loop continues while count is greater than 0. Each iteration displays the current number and decreases count by 1. Eventually count reaches 0, making the condition false and ending the loop. Without count--, the loop would run forever!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

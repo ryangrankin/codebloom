@@ -47,6 +47,46 @@ export const planningWithPseudocode: Lesson = {
       },
       "explanation": "Great work!"
     },
+
+{
+  type: "code-builder",
+  title: "Build a Movie Ticket Planner! 🎬",
+  question:
+    "A movie theater charges $12 per ticket, but customers age 12 or younger pay $7. Arrange the blocks to create a program that starts with a customer's age of 10, checks whether they qualify for the discount, and displays their ticket price.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY price",
+      "END IF",
+      "SET price = 12",
+      "ELSE",
+      "SET price = 7",
+      "IF age <= 12 THEN",
+      "SET age = 10",
+    ],
+    c: [
+      'printf("%d", price);',
+      "}",
+      "price = 12;",
+      "} else {",
+      "price = 7;",
+      "if (age <= 12) {",
+      "int age = 10;\nint price;",
+    ],
+    cpp: [
+      "cout << price;",
+      "}",
+      "price = 12;",
+      "} else {",
+      "price = 7;",
+      "if (age <= 12) {",
+      "int age = 10;\nint price;",
+    ],
+  },
+  correctBlockOrder: [6, 5, 4, 3, 2, 1, 0],
+  explanation:
+    "The program starts with an age of 10. It checks whether the customer is 12 or younger. Since 10 <= 12 is true, the ticket price becomes 7. The program skips the ELSE branch and displays 7. Planning the input, condition, assignments, and output before writing code makes the algorithm easier to understand!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

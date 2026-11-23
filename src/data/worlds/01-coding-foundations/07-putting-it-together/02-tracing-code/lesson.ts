@@ -47,6 +47,46 @@ export const tracingCode: Lesson = {
       },
       "explanation": "Great work!"
     },
+
+{
+  type: "code-builder",
+  title: "Build a Score Tracker! 🎮",
+  question:
+    "A player starts with 5 points and earns 3 more points in each of 4 rounds. Arrange the blocks to update and display the score after every round, then display 'Final score:' followed by the total.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY score",
+      'DISPLAY "Final score:"',
+      "END FOR",
+      "DISPLAY score",
+      "SET score = score + 3",
+      "FOR i = 1 TO 4",
+      "SET score = 5",
+    ],
+    c: [
+      'printf("%d", score);',
+      'printf("Final score: ");',
+      "}",
+      'printf("%d\\n", score);',
+      "score += 3;",
+      "for (int i = 1; i <= 4; i++) {",
+      "int score = 5;",
+    ],
+    cpp: [
+      "cout << score;",
+      'cout << "Final score: ";',
+      "}",
+      "cout << score << endl;",
+      "score += 3;",
+      "for (int i = 1; i <= 4; i++) {",
+      "int score = 5;",
+    ],
+  },
+  correctBlockOrder: [6, 5, 4, 3, 2, 1, 0],
+  explanation:
+    "The score starts at 5. Each round adds 3 points, producing 8, 11, 14, and 17. After the loop finishes, the program displays the final score of 17. Tracing each iteration helps you understand exactly how variables change during execution!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",
