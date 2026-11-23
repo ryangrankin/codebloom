@@ -88,6 +88,7 @@ export default function LessonScreen() {
     []
   );
   const [checked, setChecked] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
 const [language, setLanguage] =
   useState<CodeLanguage>("pseudo");
@@ -163,8 +164,12 @@ const currentCodeBlocks = isCodeBuilder
 
 const builderIsCorrect =
   isCodeBuilder &&
-  JSON.stringify(selectedOrder) ===
-    JSON.stringify(step?.correctBlockOrder);
+  selectedOrder.length === step?.correctBlockOrder?.length &&
+  selectedOrder.every(
+    (blockIndex, position) =>
+      currentCodeBlocks[blockIndex] ===
+      currentCodeBlocks[step.correctBlockOrder![position]]
+  );
 
   const currentOrderingOptions =
     lesson?.orderingOptions?.[language] ??
@@ -349,9 +354,10 @@ function changeLanguage(nextLanguage: CodeLanguage) {
 
   return (
     <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.content}
-      keyboardShouldPersistTaps="handled"
+        style={styles.container}
+        contentContainerStyle={styles.content}
+        keyboardShouldPersistTaps="handled"
+        scrollEnabled={!isDragging}
     >
       <TouchableOpacity onPress={exitLesson}>
         <Text style={styles.backButton}>
@@ -563,11 +569,12 @@ function changeLanguage(nextLanguage: CodeLanguage) {
                 </Text>
 
                  <CodeBuilder
-                     blocks={currentCodeBlocks}
-                     selectedOrder={selectedOrder}
-                     onChange={setSelectedOrder}
-                     disabled={checked}
-                    />
+                    blocks={currentCodeBlocks}
+                    selectedOrder={selectedOrder}
+                    onChange={setSelectedOrder}
+                    disabled={checked}
+                    onDragStateChange={setIsDragging}
+                />
 
                 {renderFeedback(
                  "Great job building your program!",
