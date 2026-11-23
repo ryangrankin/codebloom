@@ -65,6 +65,34 @@ export const findingLogicalErrors: Lesson = {
       explanation:
         "Debugging starts by examining what the program actually does and comparing it with what it is supposed to do. This helps identify where the logic went wrong.",
     },
+
+{
+  type: "code-builder",
+  title: "Debug the Score! 🐛",
+  question:
+    "This program is supposed to display a final score of 15, but its instructions are mixed up! Rearrange the code blocks so the program works correctly.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY score",
+      "SET score = score + 5",
+      "SET score = 10",
+    ],
+    c: [
+      'printf("%d", score);',
+      "score += 5;",
+      "int score = 10;",
+    ],
+    cpp: [
+      "cout << score;",
+      "score += 5;",
+      "int score = 10;",
+    ],
+  },
+  correctBlockOrder: [2, 1, 0],
+  explanation:
+    "You fixed the logical error! The program must first create score with a value of 10, then add 5, and finally display 15. Displaying the score too early would show the wrong result.",
+},
+
   ],
 
   codeExamples: {

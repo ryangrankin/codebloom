@@ -33,7 +33,7 @@ export const algorithmsInEverydayLife: Lesson = {
     },
     {
       type: "explanation",
-      title: "Order Matters! 🔢",
+      title: "Order Matters!",
       description:
         "Algorithms need instructions arranged in a logical order.\n\n" +
         "Imagine making a sandwich. You wouldn't eat it before putting the ingredients together!\n\n" +
@@ -55,13 +55,44 @@ export const algorithmsInEverydayLife: Lesson = {
     },
     {
       type: "ordering",
-      title: "Build an Algorithm! 🧩",
+      title: "Build an Algorithm!",
       question:
         "Arrange these steps to calculate the total cost of two items.",
       correctOrder: [2, 0, 1],
       explanation:
         "First, get the two prices. Next, add them together. Finally, display the total.",
     },
+
+{
+  type: "code-builder",
+  title: "Build a Price Calculator!",
+  question:
+    "Build a program that starts with two prices, calculates their total, and displays the result. Tap the blocks in the correct order.",
+  codeBlocks: {
+    pseudo: [
+      "OUTPUT total",
+      "SET total = price1 + price2",
+      "SET price1 = 5",
+      "SET price2 = 3",
+    ],
+    c: [
+      'printf("%.2f", total);',
+      "float total = price1 + price2;",
+      "float price1 = 5;",
+      "float price2 = 3;",
+    ],
+    cpp: [
+      "cout << total;",
+      "float total = price1 + price2;",
+      "float price1 = 5;",
+      "float price2 = 3;",
+    ],
+  },
+  correctBlockOrder: [2, 3, 1, 0],
+  explanation:
+    "First, we create our two prices. Then we add them together and display the total. The result is 8!",
+},
+
   ],
 
   codeExamples: {

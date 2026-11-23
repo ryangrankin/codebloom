@@ -80,6 +80,40 @@ export const planAnAlgorithm: Lesson = {
     explanation:
       "Planning helps you understand the problem and organize a solution before dealing with programming-language syntax.",
   },
+
+{
+  type: "code-builder",
+  title: "Build a Checkout Program! 🛒",
+  question:
+    "A customer buys two items costing $8 and $4. Build a program that calculates the total, applies a $2 discount, and displays the final price.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY finalTotal",
+      "SET finalTotal = total - 2",
+      "SET price1 = 8",
+      "SET total = price1 + price2",
+      "SET price2 = 4",
+    ],
+    c: [
+      'printf("%d", finalTotal);',
+      "int finalTotal = total - 2;",
+      "int price1 = 8;",
+      "int total = price1 + price2;",
+      "int price2 = 4;",
+    ],
+    cpp: [
+      "cout << finalTotal;",
+      "int finalTotal = total - 2;",
+      "int price1 = 8;",
+      "int total = price1 + price2;",
+      "int price2 = 4;",
+    ],
+  },
+  correctBlockOrder: [2, 4, 3, 1, 0],
+  explanation:
+    "Great work! You created two prices, calculated their total of $12, subtracted a $2 discount, and displayed the final price of $10.",
+},
+
   {
     type: "code-input",
     title: "Write Your First Code!",

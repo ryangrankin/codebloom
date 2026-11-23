@@ -65,6 +65,31 @@ export const writingYourFirstPseudocode: Lesson = {
       explanation:
         "Pseudocode helps programmers focus on the logic of a solution before worrying about language-specific syntax.",
     },
+
+{
+  type: "code-builder",
+  title: "Build a Greeting Program! 🌸",
+  question:
+    "Build a program that stores a person's name and displays a greeting. Put the code blocks in the correct order.",
+  codeBlocks: {
+    pseudo: [
+      'DISPLAY "Hello, " + name',
+      'SET name = "Alex"',
+    ],
+    c: [
+      'printf("Hello, %s!", name);',
+      'char name[] = "Alex";',
+    ],
+    cpp: [
+      'cout << "Hello, " << name << "!";',
+      'string name = "Alex";',
+    ],
+  },
+  correctBlockOrder: [1, 0],
+  explanation:
+    "First, we store the name Alex in a variable. Then we use that variable to display a personalized greeting!",
+},
+
   ],
 
   codeExamples: {
