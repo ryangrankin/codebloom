@@ -27,7 +27,13 @@ import { elseAndElseIf } from "./worlds/01-coding-foundations/04-conditions-and-
 import { nestedConditions } from "./worlds/01-coding-foundations/04-conditions-and-decisions/04-nested-conditions/lesson";
 import { combiningConditions } from "./worlds/01-coding-foundations/04-conditions-and-decisions/05-combining-conditions/lesson";
 import { gradeCalculator } from "./worlds/01-coding-foundations/04-conditions-and-decisions/06-grade-calculator/lesson";
-
+import { whyWeUseLoops } from "./worlds/01-coding-foundations/05-loops-and-repetition/01-why-we-use-loops/lesson";
+import { forLoops } from "./worlds/01-coding-foundations/05-loops-and-repetition/02-for-loops/lesson";
+import { whileLoops } from "./worlds/01-coding-foundations/05-loops-and-repetition/03-while-loops/lesson";
+import { loopCounters } from "./worlds/01-coding-foundations/05-loops-and-repetition/04-loop-counters/lesson";
+import { nestedLoops } from "./worlds/01-coding-foundations/05-loops-and-repetition/05-nested-loops/lesson";
+import { infiniteLoops } from "./worlds/01-coding-foundations/05-loops-and-repetition/06-infinite-loops/lesson";
+import { numberPatterns } from "./worlds/01-coding-foundations/05-loops-and-repetition/07-number-patterns/lesson";
 
 
 export const lessonRegistry: Record<string, Lesson> = {
@@ -57,6 +63,13 @@ export const lessonRegistry: Record<string, Lesson> = {
   [nestedConditions.id]: nestedConditions,
   [combiningConditions.id]: combiningConditions,
   [gradeCalculator.id]: gradeCalculator,
+  [whyWeUseLoops.id]: whyWeUseLoops,
+  [forLoops.id]: forLoops,
+  [whileLoops.id]: whileLoops,
+  [loopCounters.id]: loopCounters,
+  [nestedLoops.id]: nestedLoops,
+  [infiniteLoops.id]: infiniteLoops,
+  [numberPatterns.id]: numberPatterns,
 };
 
 
