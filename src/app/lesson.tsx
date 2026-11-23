@@ -25,17 +25,47 @@ const languages: { label: string; value: CodeLanguage }[] = [
 
 function normalizeCode(
   code: string,
-  language: "pseudo" | "c" | "cpp"
-) {
-  const normalized = code
+  language: CodeLanguage
+): string {
+  const cleaned = code
     .trim()
     .replace(/[“”]/g, '"')
     .replace(/[‘’]/g, "'")
-    .replace(/\s+/g, " ");
+    .replace(/\r\n?/g, "\n");
 
-  return language === "pseudo"
-    ? normalized.toLowerCase()
-    : normalized;
+  if (language === "pseudo") {
+    return cleaned
+      .replace(/\s+/g, " ")
+      .toLowerCase()
+      .replace(/\s*([=+*/()-])\s*/g, "$1");
+  }
+
+  // Ignore formatting whitespace outside quoted text.
+  // This is not a compiler or a full syntax validator.
+  let result = "";
+  let quote: '"' | "'" | null = null;
+  let escaped = false;
+
+  for (const char of cleaned) {
+    if (quote) {
+      result += char;
+
+      if (escaped) {
+        escaped = false;
+      } else if (char === "\\") {
+        escaped = true;
+      } else if (char === quote) {
+        quote = null;
+      }
+    } else if (char === '"' || char === "'") {
+      quote = char;
+      result += char;
+    } else if (!/\s/.test(char)) {
+      result += char;
+    }
+  }
+
+  return result;
 }
 
 export default function LessonScreen() {
@@ -48,14 +78,21 @@ export default function LessonScreen() {
   const lesson = getLesson(lessonId);
 
   const [stepIndex, setStepIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(
-    null
+  const [selectedAnswer, setSelectedAnswer] = useState<
+    number | null
+  >(null);
+  const [selectedOrder, setSelectedOrder] = useState<number[]>(
+    []
   );
-  const [selectedOrder, setSelectedOrder] = useState<number[]>([]);
   const [checked, setChecked] = useState(false);
   const [codeAnswer, setCodeAnswer] = useState("");
-  const [language, setLanguage] = useState<CodeLanguage>("pseudo");
-  const [wasCompletedBefore, setWasCompletedBefore] = useState(false);
+  const [language, setLanguage] =
+    useState<CodeLanguage>("pseudo");
+  const [wasCompletedBefore, setWasCompletedBefore] =
+    useState(false);
+
+  const [attempts, setAttempts] = useState(0);
+  const [showHint, setShowHint] = useState(false);
 
   const isComplete =
     !!lesson && stepIndex >= lesson.steps.length;
@@ -81,13 +118,9 @@ export default function LessonScreen() {
   useEffect(() => {
     if (!isComplete || !lesson) return;
 
-    completeLesson(lesson.id)
-      .then(() => {
-        console.log("Lesson progress saved:", lesson.id);
-      })
-      .catch((error) => {
-        console.error("Failed to save lesson progress:", error);
-      });
+    completeLesson(lesson.id).catch((error) => {
+      console.error("Failed to save progress:", error);
+    });
   }, [isComplete, lesson?.id]);
 
   const step = lesson?.steps[stepIndex];
@@ -100,9 +133,12 @@ export default function LessonScreen() {
 
   const isOrdering = step?.type === "ordering";
   const isQuiz = step?.type === "quiz";
+  const isCodeInput = step?.type === "code-input";
 
   const currentOrderingOptions =
-    lesson?.orderingOptions?.[language] ?? step?.options ?? [];
+    lesson?.orderingOptions?.[language] ??
+    step?.options ??
+    [];
 
   const orderingIsCorrect =
     isOrdering &&
@@ -112,49 +148,42 @@ export default function LessonScreen() {
   const answerIsCorrect =
     isQuiz && selectedAnswer === step?.correctAnswer;
 
-const isCodeInput = step?.type === "code-input";
+  const acceptedCodeAnswers = isCodeInput
+    ? step.acceptedAnswers?.[language] ?? []
+    : [];
 
-const acceptedCodeAnswers = isCodeInput
-  ? step.acceptedAnswers?.[language] ?? []
-  : [];
+  const codeIsCorrect =
+    isCodeInput &&
+    acceptedCodeAnswers.some(
+      (answer) =>
+        normalizeCode(answer, language) ===
+        normalizeCode(codeAnswer, language)
+    );
 
-const codeIsCorrect =
-  isCodeInput &&
-  acceptedCodeAnswers.some(
-    (answer) =>
-      normalizeCode(answer, language) ===
-      normalizeCode(codeAnswer, language)
-  );
+  const isCorrect = isOrdering
+    ? orderingIsCorrect
+    : isQuiz
+      ? answerIsCorrect
+      : isCodeInput
+        ? codeIsCorrect
+        : true;
 
-
-
-const isCorrect = isOrdering
-  ? orderingIsCorrect
-  : isQuiz
-  ? answerIsCorrect
-  : isCodeInput
-  ? codeIsCorrect
-  : true;
-
-const canCheck = isOrdering
-  ? currentOrderingOptions.length > 0 &&
-    selectedOrder.length === currentOrderingOptions.length
-  : isQuiz
-  ? selectedAnswer !== null
-  : isCodeInput
-  ? codeAnswer.trim().length > 0
-  : false;
+  const canCheck = isOrdering
+    ? currentOrderingOptions.length > 0 &&
+      selectedOrder.length === currentOrderingOptions.length
+    : isQuiz
+      ? selectedAnswer !== null
+      : isCodeInput
+        ? codeAnswer.trim().length > 0
+        : false;
 
   function resetAnswer() {
-  setSelectedAnswer(null);
-  setSelectedOrder([]);
-  setCodeAnswer("");
-  setChecked(false);
-}
-
-  function resetLesson() {
-    setStepIndex(0);
-    resetAnswer();
+    setSelectedAnswer(null);
+    setSelectedOrder([]);
+    setCodeAnswer("");
+    setChecked(false);
+    setAttempts(0);
+    setShowHint(false);
   }
 
   function nextStep() {
@@ -163,37 +192,80 @@ const canCheck = isOrdering
   }
 
   function exitLesson() {
-    resetLesson();
+    resetAnswer();
+    setStepIndex(0);
     router.replace("/learn");
   }
 
+  function checkAnswer() {
+    if (!canCheck) return;
+
+    setChecked(true);
+
+    if (!isCorrect) {
+      setAttempts((previous) => previous + 1);
+    }
+  }
+
   function retryAnswer() {
-    resetAnswer();
+    if (isCodeInput) {
+      // Keep the learner's code so they can debug it.
+      setChecked(false);
+      setShowHint(false);
+    } else {
+      setSelectedAnswer(null);
+      setSelectedOrder([]);
+      setChecked(false);
+    }
   }
 
-function changeLanguage(nextLanguage: CodeLanguage) {
-  if (nextLanguage === language) return;
+  function changeLanguage(nextLanguage: CodeLanguage) {
+    if (nextLanguage === language) return;
 
-  setLanguage(nextLanguage);
+    setLanguage(nextLanguage);
 
-  // Each language has its own syntax.
-  // Clear the current answer when switching languages.
-  if (isOrdering) {
-    setSelectedOrder([]);
-    setChecked(false);
+    if (isOrdering || isCodeInput) {
+      setSelectedOrder([]);
+      setCodeAnswer("");
+      setChecked(false);
+      setAttempts(0);
+      setShowHint(false);
+    }
   }
 
-  if (step?.type === "code-input") {
-    setCodeAnswer("");
-    setChecked(false);
+  function renderFeedback(
+    correctMessage: string,
+    incorrectMessage: string
+  ) {
+    if (!checked) return null;
+
+    return (
+      <View
+        style={[
+          styles.feedback,
+          isCorrect
+            ? styles.correctFeedback
+            : styles.incorrectFeedback,
+        ]}
+      >
+        <Text style={styles.feedbackTitle}>
+          {isCorrect ? "Correct! 🎉" : "Not quite! 💡"}
+        </Text>
+        <Text style={styles.feedbackText}>
+          {isCorrect
+            ? step?.explanation ?? correctMessage
+            : incorrectMessage}
+        </Text>
+      </View>
+    );
   }
-}
 
   if (!lesson) {
     return (
       <View style={styles.completeContainer}>
-        <Text style={styles.completeTitle}>Lesson Not Found</Text>
-
+        <Text style={styles.completeTitle}>
+          Lesson Not Found
+        </Text>
         <TouchableOpacity
           style={styles.button}
           onPress={() => router.replace("/learn")}
@@ -210,21 +282,17 @@ function changeLanguage(nextLanguage: CodeLanguage) {
     return (
       <View style={styles.completeContainer}>
         <Text style={styles.completeEmoji}>🌸</Text>
-
         <Text style={styles.completeTitle}>
           Lesson Complete!
         </Text>
-
         <Text style={styles.completeDescription}>
           You finished {lesson.title}!
         </Text>
-
         <Text style={styles.xpReward}>
           {wasCompletedBefore
             ? `⚡ ${lesson.xp} XP lesson reviewed`
             : `⚡ +${lesson.xp} XP`}
         </Text>
-
         <TouchableOpacity
           style={styles.button}
           onPress={exitLesson}
@@ -243,6 +311,7 @@ function changeLanguage(nextLanguage: CodeLanguage) {
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
+      keyboardShouldPersistTaps="handled"
     >
       <TouchableOpacity onPress={exitLesson}>
         <Text style={styles.backButton}>
@@ -259,7 +328,9 @@ function changeLanguage(nextLanguage: CodeLanguage) {
         <View
           style={[
             styles.progressFill,
-            { width: `${progress}%` as `${number}%` },
+            {
+              width: `${progress}%` as `${number}%`,
+            },
           ]}
         />
       </View>
@@ -270,7 +341,7 @@ function changeLanguage(nextLanguage: CodeLanguage) {
 
       <Text style={styles.title}>{step.title}</Text>
 
-      {/* Language toggle */}
+      {/* Language selector */}
       <View style={styles.languageContainer}>
         <Text style={styles.languageLabel}>
           VIEW CODE AS
@@ -319,10 +390,9 @@ function changeLanguage(nextLanguage: CodeLanguage) {
                 {language === "pseudo"
                   ? "PSEUDOCODE"
                   : language === "c"
-                  ? "C"
-                  : "C++"}
+                    ? "C"
+                    : "C++"}
               </Text>
-
               <ScrollView horizontal>
                 <Text style={styles.codeText}>
                   {lesson.codeExamples[language]}
@@ -342,7 +412,8 @@ function changeLanguage(nextLanguage: CodeLanguage) {
           <View style={styles.orderContainer}>
             {selectedOrder.length === 0 ? (
               <Text style={styles.placeholder}>
-                Tap the instructions below in the correct order.
+                Tap the instructions below in the
+                correct order.
               </Text>
             ) : (
               selectedOrder.map((index, position) => (
@@ -391,33 +462,14 @@ function changeLanguage(nextLanguage: CodeLanguage) {
             )
           )}
 
-          {checked && (
-            <View
-              style={[
-                styles.feedback,
-                isCorrect
-                  ? styles.correctFeedback
-                  : styles.incorrectFeedback,
-              ]}
-            >
-              <Text style={styles.feedbackTitle}>
-                {isCorrect
-                  ? "Correct! 🎉"
-                  : "Not quite! 💡"}
-              </Text>
-
-              <Text style={styles.feedbackText}>
-                {isCorrect
-                  ? step.explanation ??
-                    "Great job putting the steps in order!"
-                  : "The sequence isn't quite right. Think about which instruction needs to happen first, then try again."}
-              </Text>
-            </View>
+          {renderFeedback(
+            "Great job putting the steps in order!",
+            "The sequence isn't quite right. Think about what must happen first."
           )}
         </View>
       )}
 
-      {/* Multiple-choice quiz */}
+      {/* Multiple-choice exercise */}
       {isQuiz && (
         <View>
           <Text style={styles.question}>
@@ -456,93 +508,115 @@ function changeLanguage(nextLanguage: CodeLanguage) {
             );
           })}
 
-          {checked && (
-            <View
-              style={[
-                styles.feedback,
-                isCorrect
-                  ? styles.correctFeedback
-                  : styles.incorrectFeedback,
-              ]}
-            >
-              <Text style={styles.feedbackTitle}>
-                {isCorrect
-                  ? "Correct! 🎉"
-                  : "Not quite! 💡"}
-              </Text>
-
-              <Text style={styles.feedbackText}>
-                {isCorrect
-                  ? step.explanation ??
-                    "Great job! You got it right."
-                  : "That isn't the correct answer. Review the question and try another option."}
-              </Text>
-            </View>
+          {renderFeedback(
+            "Great job! You got it right.",
+            "Review the question and try another option."
           )}
         </View>
       )}
 
       {/* Code-writing exercise */}
-{step.type === "code-input" && (
-  <View>
-    <Text style={styles.question}>
-      {step.question}
-    </Text>
+      {isCodeInput && (
+        <View>
+          <Text style={styles.question}>
+            {step.question}
+          </Text>
 
-    <View style={styles.codeContainer}>
-      <Text style={styles.codeLabel}>
-        {language === "pseudo"
-          ? "PSEUDOCODE"
-          : language === "c"
-          ? "C"
-          : "C++"}
-      </Text>
+          <View style={styles.codeContainer}>
+            <Text style={styles.codeLabel}>
+              {language === "pseudo"
+                ? "PSEUDOCODE"
+                : language === "c"
+                  ? "C"
+                  : "C++"}
+            </Text>
+            <ScrollView horizontal>
+              <Text style={styles.codeText}>
+                {step.codePrompt?.[language]}
+              </Text>
+            </ScrollView>
+          </View>
 
-      <Text style={styles.codeText}>
-        {step.codePrompt?.[language]}
-      </Text>
-    </View>
+          <Text style={styles.orderLabel}>
+            Write your code:
+          </Text>
 
-    <Text style={styles.orderLabel}>
-      Write your code:
-    </Text>
+          <View style={styles.editorContainer}>
+            <View style={styles.editorHeader}>
+              <Text style={styles.editorHeaderText}>
+                ✦ CODEBLOOM EDITOR
+              </Text>
+              <Text style={styles.editorHeaderText}>
+                {language === "pseudo"
+                  ? "PSEUDO"
+                  : language === "c"
+                    ? "C"
+                    : "C++"}
+              </Text>
+            </View>
 
-    <TextInput
-      style={styles.codeInput}
-      value={codeAnswer}
-      onChangeText={setCodeAnswer}
-      placeholder={step.placeholder ?? "Type your code here..."}
-      placeholderTextColor="#9A90A5"
-      multiline
-      autoCapitalize="none"
-      autoCorrect={false}
-      editable={!checked}
-    />
-    {checked && (
-  <View
-    style={[
-      styles.feedback,
-      isCorrect
-        ? styles.correctFeedback
-        : styles.incorrectFeedback,
-    ]}
-  >
-    <Text style={styles.feedbackTitle}>
-      {isCorrect ? "Correct! 🎉" : "Not quite! 💡"}
-    </Text>
+            <TextInput
+              style={styles.codeInput}
+              value={codeAnswer}
+              onChangeText={setCodeAnswer}
+              placeholder={
+                step.placeholder ??
+                "Write your code here..."
+              }
+              placeholderTextColor="#9A90A5"
+              multiline
+              numberOfLines={7}
+              scrollEnabled
+              autoCapitalize="none"
+              autoCorrect={false}
+              spellCheck={false}
+              editable={!checked}
+              selectionColor="#9162E4"
+            />
+          </View>
 
-    <Text style={styles.feedbackText}>
-      {isCorrect
-        ? step.explanation ??
-          "Great job writing your own code!"
-        : "Your code doesn't match an accepted solution yet. Check the syntax and try again."}
-    </Text>
-  </View>
-)}
-  </View>
-)}
+          <Text style={styles.editorHelp}>
+            Write your answer in the editor.
+            Spacing outside quoted text won't
+            affect checking.
+          </Text>
 
-      {/* Navigation buttons */}
+          {attempts > 0 && !checked && (
+            <TouchableOpacity
+              style={styles.hintButton}
+              onPress={() =>
+                setShowHint((previous) => !previous)
+              }
+            >
+              <Text style={styles.hintButtonText}>
+                {showHint
+                  ? "Hide hint"
+                  : "💡 Need a hint?"}
+              </Text>
+            </TouchableOpacity>
+          )}
+
+          {showHint && !checked && (
+            <View style={styles.hintBox}>
+              <Text style={styles.feedbackText}>
+                {attempts >= 2
+                  ? `One accepted example: ${
+                      acceptedCodeAnswers[0] ??
+                      "Review the instructions."
+                    }`
+                  : "Check your variable names, operators, punctuation, and whether you need a declaration or assignment."}
+              </Text>
+            </View>
+          )}
+
+          {renderFeedback(
+            "Great job writing your own code!",
+            "Your code doesn't match an accepted solution yet. Check the syntax, then edit your code and try again."
+          )}
+        </View>
+      )}
+
+      {/* Navigation */}
       {step.type === "explanation" ? (
         <TouchableOpacity
           style={styles.button}
@@ -559,7 +633,7 @@ function changeLanguage(nextLanguage: CodeLanguage) {
             !canCheck && styles.disabledButton,
           ]}
           disabled={!canCheck}
-          onPress={() => setChecked(true)}
+          onPress={checkAnswer}
         >
           <Text style={styles.buttonText}>
             Check Answer
@@ -580,7 +654,7 @@ function changeLanguage(nextLanguage: CodeLanguage) {
           onPress={retryAnswer}
         >
           <Text style={styles.retryButtonText}>
-            ↻ Try Again
+            ↻ Edit & Try Again
           </Text>
         </TouchableOpacity>
       )}
@@ -833,17 +907,54 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     lineHeight: 22,
   },
-
+  editorContainer: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 2,
+    borderColor: "#9162E4",
+    borderRadius: 16,
+    overflow: "hidden",
+  },
+  editorHeader: {
+    backgroundColor: "#F3EAFF",
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  editorHeaderText: {
+    color: "#9162E4",
+    fontSize: 10,
+    fontWeight: "800",
+    letterSpacing: 1,
+  },
   codeInput: {
-  backgroundColor: "#FFFFFF",
-  borderWidth: 2,
-  borderColor: "#9162E4",
-  borderRadius: 16,
-  padding: 18,
-  minHeight: 110,
-  fontFamily: "monospace",
-  fontSize: 15,
-  color: "#392653",
-  textAlignVertical: "top",
-},
+    padding: 18,
+    minHeight: 190,
+    fontFamily: "monospace",
+    fontSize: 15,
+    color: "#392653",
+    textAlignVertical: "top",
+    lineHeight: 24,
+  },
+  editorHelp: {
+    fontSize: 12,
+    color: "#847A91",
+    marginTop: 10,
+    lineHeight: 18,
+  },
+  hintButton: {
+    marginTop: 12,
+    padding: 12,
+    alignSelf: "flex-start",
+  },
+  hintButtonText: {
+    color: "#9162E4",
+    fontWeight: "700",
+  },
+  hintBox: {
+    padding: 16,
+    backgroundColor: "#F3EAFF",
+    borderRadius: 14,
+    marginTop: 8,
+  },
 });
