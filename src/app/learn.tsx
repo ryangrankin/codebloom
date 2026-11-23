@@ -13,7 +13,7 @@ const chapters = [
     title: "Thinking Like a Programmer",
     lessons: [
       "What Is Programming?",
-      "Breaking Down a Problem",
+      "Algorithms in Everyday Life",
       "Writing Your First Pseudocode",
       "Sequencing Instructions",
       "Finding Logical Errors",
@@ -159,13 +159,22 @@ export default function LearnScreen() {
                     key={lessonIndex}
                     style={styles.lessonRow}
                     onPress={() => {
-                        if (chapterIndex === 0 && lessonIndex === 0) {
-                            router.push({
-                                pathname: "/lesson",
-                                params: { id: "what-is-programming" },
-                            });
-                        }
-                    }}
+  if (chapterIndex === 0) {
+    const lessonIds = [
+      "what-is-programming",
+      "algorithms-in-everyday-life",
+    ];
+
+    const lessonId = lessonIds[lessonIndex];
+
+    if (lessonId) {
+      router.push({
+        pathname: "/lesson",
+        params: { id: lessonId },
+      });
+    }
+  }
+}}
                   >
                     <View style={styles.lessonCircle}>
                       <Text style={styles.lessonNumber}>
