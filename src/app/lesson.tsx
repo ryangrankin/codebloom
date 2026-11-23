@@ -1,5 +1,5 @@
 
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import {
     ScrollView,
@@ -9,370 +9,277 @@ import {
     View,
 } from "react-native";
 
-type LessonStep = {
-  type: "explanation" | "quiz" | "ordering";
-  title: string;
-  description?: string;
-  question?: string;
-  options?: string[];
-  correctAnswer?: number;
-  correctOrder?: number[];
-  explanation?: string;
-};
-
-type CodeLanguage = "pseudo" | "c" | "cpp";
-
-const codeExamples: Record<CodeLanguage, string> = {
-  pseudo: `INPUT number
-result ← number * 2
-OUTPUT result`,
-
-  c: `#include <stdio.h>
-
-int main() {
-  int number;
-  scanf("%d", &number);
-
-  int result = number * 2;
-  printf("%d", result);
-
-  return 0;
-}`,
-
-  cpp: `#include <iostream>
-using namespace std;
-
-int main() {
-  int number;
-  cin >> number;
-
-  int result = number * 2;
-  cout << result;
-
-  return 0;
-}`,
-};
-
-const orderingOptions: Record<CodeLanguage, string[]> = {
-  pseudo: [
-    "OUTPUT result",
-    "INPUT number",
-    "result ← number * 2",
-  ],
-
-  c: [
-    'printf("%d", result);',
-    'scanf("%d", &number);',
-    "int result = number * 2;",
-  ],
-
-  cpp: [
-    "cout << result;",
-    "cin >> number;",
-    "int result = number * 2;",
-  ],
-};
-
-const lessonSteps: LessonStep[] = [
-  {
-    type: "explanation",
-    title: "Welcome to Coding!",
-    description:
-      "Programming is the process of giving a computer instructions to complete a task.\n\n" +
-      "These instructions are written using programming languages such as C and C++.\n\n" +
-      "Before writing code, programmers break problems into smaller steps.",
-  },
-  {
-    type: "quiz",
-    title: "Quick Check!",
-    question: "What is programming?",
-    options: [
-      "Giving a computer instructions",
-      "Building computers",
-      "Using the internet",
-      "Designing websites only",
-    ],
-    correctAnswer: 0,
-    explanation:
-      "Programming means writing instructions that tell a computer what to do.",
-  },
-  {
-    type: "quiz",
-    title: "Think Like a Programmer",
-    question: "Why do programmers break problems into smaller steps?",
-    options: [
-      "To make programs longer",
-      "To make problems easier to solve",
-      "Because computers cannot run large programs",
-      "To avoid using programming languages",
-    ],
-    correctAnswer: 1,
-    explanation:
-      "Breaking a problem into smaller steps makes it easier to understand, solve, and debug.",
-  },
-  {
-    type: "quiz",
-    title: "Knowledge Check",
-    question: "Which of these is a programming language?",
-    options: ["Google", "Wi-Fi", "C++", "Keyboard"],
-    correctAnswer: 2,
-    explanation:
-      "C++ is a programming language used to write instructions for computers.",
-  },
-  {
-  type: "ordering",
-  title: "Think Like a Programmer ",
-  question: "Put these instructions in the correct order.",
-  options: [
-    "Display the result",
-    "Ask the user for a number",
-    "Multiply the number by 2",
-  ],
-  correctOrder: [1, 2, 0],
-  explanation:
-    "First, get the input. Next, process it. Finally, display the output.",
-},
-];
+import { getLesson } from "../data/lessonRegistry";
+import type { CodeLanguage } from "../data/types";
 
 export default function LessonScreen() {
   const router = useRouter();
+  const { id } = useLocalSearchParams<{ id?: string }>();
 
+  const lessonId = typeof id === "string" ? id : "what-is-programming";
+  const lesson = getLesson(lessonId);
+  
   const [stepIndex, setStepIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(
     null
   );
-  const [checked, setChecked] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<number[]>([]);
-  const [language, setLanguage] = useState<"pseudo" | "c" | "cpp">(
-    "pseudo"
-  );
+  const [checked, setChecked] = useState(false);
+  const [language, setLanguage] = useState<CodeLanguage>("pseudo");
 
-  const isComplete = stepIndex >= lessonSteps.length;
-  const step = lessonSteps[stepIndex];
+  const isComplete = stepIndex >= (lesson?.steps.length ?? 0);
+  const step = lesson?.steps[stepIndex];
 
-  const progress = isComplete
+  const progress = lesson
+  ? isComplete
     ? 100
-    : (stepIndex / lessonSteps.length) * 100;
+    : (stepIndex / lesson.steps.length) * 100
+  : 0;
+
+  function resetLesson() {
+    setStepIndex(0);
+    setSelectedAnswer(null);
+    setSelectedOrder([]);
+    setChecked(false);
+  }
 
   function nextStep() {
     setStepIndex((previous) => previous + 1);
     setSelectedAnswer(null);
-    setChecked(false);
     setSelectedOrder([]);
+    setChecked(false);
   }
-  function resetLesson() {
-  setStepIndex(0);
-  setSelectedAnswer(null);
-  setSelectedOrder([]);
-  setChecked(false);
+
+  function exitLesson() {
+    resetLesson();
+    router.replace("/learn");
+  }
+
+  const isOrdering = step?.type === "ordering";
+  const isQuiz = step?.type === "quiz";
+
+  const currentOrderingOptions =
+    lesson?.orderingOptions?.[language] ?? step?.options ?? [];
+
+  const orderingIsCorrect =
+    JSON.stringify(selectedOrder) ===
+    JSON.stringify(step?.correctOrder);
+
+  const answerIsCorrect =
+    selectedAnswer === step?.correctAnswer;
+
+if (!lesson) {
+  return (
+    <View style={styles.completeContainer}>
+      <Text style={styles.completeTitle}>Lesson Not Found</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.replace("/learn")}
+      >
+        <Text style={styles.buttonText}>Back to Learning Path</Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
 
   if (isComplete) {
     return (
       <View style={styles.completeContainer}>
         <Text style={styles.completeEmoji}>🌸</Text>
-        <Text style={styles.completeTitle}>Lesson Complete!</Text>
-        <Text style={styles.completeDescription}>
-          You finished your first CodeBloom lesson!
+
+        <Text style={styles.completeTitle}>
+          Lesson Complete!
         </Text>
-        <Text style={styles.xpReward}>⚡ +15 XP</Text>
+
+        <Text style={styles.completeDescription}>
+          You finished {lesson.title}!
+        </Text>
+
+        <Text style={styles.xpReward}>
+          ⚡ +{lesson.xp} XP
+        </Text>
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => {
-                resetLesson();
-                router.replace("/learn");
-            }}
+          onPress={exitLesson}
         >
-          <Text style={styles.buttonText}>Back to Learning Path</Text>
+          <Text style={styles.buttonText}>
+            Back to Learning Path
+          </Text>
         </TouchableOpacity>
       </View>
     );
   }
-
-  const isQuiz = step.type === "quiz";
 
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
     >
-      <TouchableOpacity
-        onPress={() => {
-             resetLesson();
-            router.replace("/learn");
-        }}
-    >
-        <Text style={styles.backButton}>← Exit Lesson</Text>
+      {/* Exit lesson */}
+      <TouchableOpacity onPress={exitLesson}>
+        <Text style={styles.backButton}>
+          ← Exit Lesson
+        </Text>
       </TouchableOpacity>
 
+      {/* Lesson information */}
       <Text style={styles.chapterLabel}>
-        WORLD 01 · CHAPTER 01 · LESSON 01
+        {lesson.world.toUpperCase()} · {lesson.chapter.toUpperCase()}
       </Text>
 
+      {/* Progress bar */}
       <View style={styles.progressTrack}>
         <View
-          style={[styles.progressFill, { width: `${progress}%` }]}
+          style={[
+            styles.progressFill,
+            { width: `${progress}%` },
+          ]}
         />
       </View>
 
       <Text style={styles.stepCounter}>
-        Step {stepIndex + 1} of {lessonSteps.length}
+        Step {stepIndex + 1} of {lesson.steps.length}
       </Text>
 
       <Text style={styles.title}>{step.title}</Text>
+
+      {/* Language toggle */}
       <View style={styles.languageContainer}>
-  <Text style={styles.languageLabel}>VIEW CODE AS</Text>
-
-  <View style={styles.languageToggle}>
-    {[
-      { label: "Pseudocode", value: "pseudo" },
-      { label: "C", value: "c" },
-      { label: "C++", value: "cpp" },
-    ].map((option) => (
-      <TouchableOpacity
-        key={option.value}
-        style={[
-          styles.languageOption,
-          language === option.value && styles.activeLanguageOption,
-        ]}
-        onPress={() =>
-          setLanguage(option.value as "pseudo" | "c" | "cpp")
-        }
-      >
-        <Text
-          style={[
-            styles.languageOptionText,
-            language === option.value && styles.activeLanguageText,
-          ]}
-        >
-          {option.label}
+        <Text style={styles.languageLabel}>
+          VIEW CODE AS
         </Text>
-      </TouchableOpacity>
-    ))}
-  </View>
-</View>
 
+        <View style={styles.languageToggle}>
+          {[
+            { label: "Pseudocode", value: "pseudo" },
+            { label: "C", value: "c" },
+            { label: "C++", value: "cpp" },
+          ].map((option) => (
+            <TouchableOpacity
+              key={option.value}
+              style={[
+                styles.languageOption,
+                language === option.value &&
+                  styles.activeLanguageOption,
+              ]}
+              onPress={() =>
+                setLanguage(option.value as CodeLanguage)
+              }
+            >
+              <Text
+                style={[
+                  styles.languageOptionText,
+                  language === option.value &&
+                    styles.activeLanguageText,
+                ]}
+              >
+                {option.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+
+      {/* Explanation */}
       {step.type === "explanation" && (
         <View style={styles.card}>
-          <Text style={styles.description}>{step.description}</Text>
+          <Text style={styles.description}>
+            {step.description}
+          </Text>
         </View>
       )}
 
-      {step.type === "ordering" && (
-  <View>
-    <View style={styles.codeContainer}>
-  <Text style={styles.codeLabel}>
-    {language === "pseudo"
-      ? "PSEUDOCODE"
-      : language === "c"
-      ? "C"
-      : "C++"}
-  </Text>
-
-  <ScrollView horizontal>
-    <Text style={styles.codeText}>
-      {codeExamples[language]}
-    </Text>
-  </ScrollView>
-</View>
-    <Text style={styles.question}>{step.question}</Text>
-
-    <Text style={styles.orderLabel}>Your sequence:</Text>
-
-    <View style={styles.orderContainer}>
-      {selectedOrder.length === 0 ? (
-        <Text style={styles.placeholder}>
-          Tap the instructions below in the correct order.
-        </Text>
-      ) : (
-        selectedOrder.map((index, position) => (
-          <TouchableOpacity
-            key={index}
-            disabled={checked}
-            style={styles.orderItem}
-            onPress={() =>
-              setSelectedOrder((previous) =>
-                previous.filter((value) => value !== index)
-              )
-            }
-          >
-            <Text style={styles.optionText}>
-              {position + 1}. {orderingOptions[language][index]} ✕ ✕
-            </Text>
-          </TouchableOpacity>
-        ))
-      )}
-    </View>
-
-    <Text style={styles.orderLabel}>Available instructions:</Text>
-
-     {orderingOptions[language].map((option, index) =>
-       selectedOrder.includes(index) ? null : (
-          <TouchableOpacity
-             key={index}
-             disabled={checked}
-            style={styles.option}
-            onPress={() =>
-             setSelectedOrder((previous) => [...previous, index])
-             }
-           >
-             <Text style={styles.optionText}>{option}</Text>
-            </TouchableOpacity>
-          )
-        )}
-
-     {checked && (
-         <View style={styles.feedback}>
-          <Text style={styles.feedbackTitle}>
-           {JSON.stringify(selectedOrder) ===
-           JSON.stringify(step.correctOrder)
-             ? "Correct! 🎉"
-             : "Not quite! 💡"}
-         </Text>
-         <Text style={styles.feedbackText}>
-            {step.explanation}
-          </Text>
-          </View>
-      )}
-     </View>
-    )}
-
-      {isQuiz && (
+      {/* Ordering exercise */}
+      {isOrdering && (
         <View>
-          <Text style={styles.question}>{step.question}</Text>
+          {/* Code example */}
+          {lesson.codeExamples && (
+            <View style={styles.codeContainer}>
+              <Text style={styles.codeLabel}>
+                {language === "pseudo"
+                  ? "PSEUDOCODE"
+                  : language === "c"
+                  ? "C"
+                  : "C++"}
+              </Text>
 
-          {step.options?.map((option, index) => {
-            const isSelected = selectedAnswer === index;
-            const isCorrect = step.correctAnswer === index;
+              <ScrollView horizontal>
+                <Text style={styles.codeText}>
+                  {lesson.codeExamples[language]}
+                </Text>
+              </ScrollView>
+            </View>
+          )}
 
-            return (
+          <Text style={styles.question}>
+            {step.question}
+          </Text>
+
+          <Text style={styles.orderLabel}>
+            Your sequence:
+          </Text>
+
+          <View style={styles.orderContainer}>
+            {selectedOrder.length === 0 ? (
+              <Text style={styles.placeholder}>
+                Tap the instructions below in the correct order.
+              </Text>
+            ) : (
+              selectedOrder.map((index, position) => (
+                <TouchableOpacity
+                  key={index}
+                  disabled={checked}
+                  style={styles.orderItem}
+                  onPress={() =>
+                    setSelectedOrder((previous) =>
+                      previous.filter(
+                        (value) => value !== index
+                      )
+                    )
+                  }
+                >
+                  <Text style={styles.optionText}>
+                    {position + 1}.{" "}
+                    {currentOrderingOptions[index]} ✕
+                  </Text>
+                </TouchableOpacity>
+              ))
+            )}
+          </View>
+
+          <Text style={styles.orderLabel}>
+            Available instructions:
+          </Text>
+
+          {currentOrderingOptions.map((option, index) =>
+            selectedOrder.includes(index) ? null : (
               <TouchableOpacity
                 key={index}
                 disabled={checked}
-                style={[
-                  styles.option,
-                  isSelected && styles.selectedOption,
-                  checked && isCorrect && styles.correctOption,
-                  checked &&
-                    isSelected &&
-                    !isCorrect &&
-                    styles.incorrectOption,
-                ]}
-                onPress={() => setSelectedAnswer(index)}
+                style={styles.option}
+                onPress={() =>
+                  setSelectedOrder((previous) => [
+                    ...previous,
+                    index,
+                  ])
+                }
               >
-                <Text style={styles.optionText}>{option}</Text>
+                <Text style={styles.optionText}>
+                  {option}
+                </Text>
               </TouchableOpacity>
-            );
-          })}
+            )
+          )}
 
           {checked && (
             <View style={styles.feedback}>
               <Text style={styles.feedbackTitle}>
-                {selectedAnswer === step.correctAnswer
+                {orderingIsCorrect
                   ? "Correct! 🎉"
                   : "Not quite! 💡"}
               </Text>
+
               <Text style={styles.feedbackText}>
                 {step.explanation}
               </Text>
@@ -381,32 +288,107 @@ export default function LessonScreen() {
         </View>
       )}
 
+      {/* Multiple-choice quiz */}
+      {isQuiz && (
+        <View>
+          <Text style={styles.question}>
+            {step.question}
+          </Text>
+
+          {step.options?.map((option, index) => {
+            const isSelected =
+              selectedAnswer === index;
+
+            const isCorrect =
+              step.correctAnswer === index;
+
+            return (
+              <TouchableOpacity
+                key={index}
+                disabled={checked}
+                style={[
+                  styles.option,
+                  isSelected &&
+                    styles.selectedOption,
+                  checked &&
+                    isCorrect &&
+                    styles.correctOption,
+                  checked &&
+                    isSelected &&
+                    !isCorrect &&
+                    styles.incorrectOption,
+                ]}
+                onPress={() =>
+                  setSelectedAnswer(index)
+                }
+              >
+                <Text style={styles.optionText}>
+                  {option}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+
+          {checked && (
+            <View style={styles.feedback}>
+              <Text style={styles.feedbackTitle}>
+                {answerIsCorrect
+                  ? "Correct! 🎉"
+                  : "Not quite! 💡"}
+              </Text>
+
+              <Text style={styles.feedbackText}>
+                {step.explanation}
+              </Text>
+            </View>
+          )}
+        </View>
+      )}
+
+      {/* Navigation buttons */}
       {step.type === "explanation" ? (
-  <TouchableOpacity style={styles.button} onPress={nextStep}>
-    <Text style={styles.buttonText}>Continue →</Text>
-  </TouchableOpacity>
-) : !checked ? (
-  <TouchableOpacity
-    style={[
-      styles.button,
-      (step.type === "ordering"
-        ? selectedOrder.length !== orderingOptions[language].length
-        : selectedAnswer === null) && styles.disabledButton,
-    ]}
-    disabled={
-      step.type === "ordering"
-        ? selectedOrder.length !== orderingOptions[language].length
-        : selectedAnswer === null
-    }
-    onPress={() => setChecked(true)}
-  >
-    <Text style={styles.buttonText}>Check Answer</Text>
-  </TouchableOpacity>
-) : (
-  <TouchableOpacity style={styles.button} onPress={nextStep}>
-    <Text style={styles.buttonText}>Continue →</Text>
-  </TouchableOpacity>
-)}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={nextStep}
+        >
+          <Text style={styles.buttonText}>
+            Continue →
+          </Text>
+        </TouchableOpacity>
+      ) : !checked ? (
+        <TouchableOpacity
+          style={[
+            styles.button,
+            (isOrdering
+              ? selectedOrder.length !==
+                currentOrderingOptions.length ||
+                currentOrderingOptions.length === 0
+              : selectedAnswer === null) &&
+              styles.disabledButton,
+          ]}
+          disabled={
+            isOrdering
+              ? selectedOrder.length !==
+                  currentOrderingOptions.length ||
+                currentOrderingOptions.length === 0
+              : selectedAnswer === null
+          }
+          onPress={() => setChecked(true)}
+        >
+          <Text style={styles.buttonText}>
+            Check Answer
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={nextStep}
+        >
+          <Text style={styles.buttonText}>
+            Continue →
+          </Text>
+        </TouchableOpacity>
+      )}
     </ScrollView>
   );
 }
@@ -561,80 +543,80 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   orderLabel: {
-  fontSize: 14,
-  fontWeight: "700",
-  color: "#685779",
-  marginBottom: 12,
-  marginTop: 15,
-},
-orderContainer: {
-  backgroundColor: "#F3EAFF",
-  borderRadius: 16,
-  padding: 15,
-  minHeight: 85,
-  marginBottom: 18,
-},
-orderItem: {
-  backgroundColor: "#FFFFFF",
-  borderRadius: 12,
-  padding: 14,
-  marginBottom: 8,
-},
-placeholder: {
-  fontSize: 14,
-  color: "#847A91",
-  lineHeight: 22,
-},
-languageContainer: {
-  marginBottom: 24,
-},
-languageLabel: {
-  fontSize: 11,
-  fontWeight: "800",
-  color: "#9162E4",
-  letterSpacing: 1,
-  marginBottom: 10,
-},
-languageToggle: {
-  flexDirection: "row",
-  backgroundColor: "#EDE3F8",
-  borderRadius: 14,
-  padding: 4,
-},
-languageOption: {
-  flex: 1,
-  paddingVertical: 12,
-  alignItems: "center",
-  borderRadius: 11,
-},
-activeLanguageOption: {
-  backgroundColor: "#9162E4",
-},
-languageOptionText: {
-  fontSize: 13,
-  fontWeight: "700",
-  color: "#685779",
-},
-activeLanguageText: {
-  color: "#FFFFFF",
-},
-codeContainer: {
-  backgroundColor: "#242033",
-  borderRadius: 16,
-  padding: 18,
-  marginBottom: 24,
-},
-codeLabel: {
-  fontSize: 11,
-  fontWeight: "800",
-  color: "#C8B9FA",
-  marginBottom: 14,
-  letterSpacing: 1,
-},
-codeText: {
-  fontFamily: "monospace",
-  fontSize: 13,
-  color: "#FFFFFF",
-  lineHeight: 22,
-},
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#685779",
+    marginBottom: 12,
+    marginTop: 15,
+  },
+  orderContainer: {
+    backgroundColor: "#F3EAFF",
+    borderRadius: 16,
+    padding: 15,
+    minHeight: 85,
+    marginBottom: 18,
+  },
+  orderItem: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 8,
+  },
+  placeholder: {
+    fontSize: 14,
+    color: "#847A91",
+    lineHeight: 22,
+  },
+  languageContainer: {
+    marginBottom: 24,
+  },
+  languageLabel: {
+    fontSize: 11,
+    fontWeight: "800",
+    color: "#9162E4",
+    letterSpacing: 1,
+    marginBottom: 10,
+  },
+  languageToggle: {
+    flexDirection: "row",
+    backgroundColor: "#EDE3F8",
+    borderRadius: 14,
+    padding: 4,
+  },
+  languageOption: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: "center",
+    borderRadius: 11,
+  },
+  activeLanguageOption: {
+    backgroundColor: "#9162E4",
+  },
+  languageOptionText: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: "#685779",
+  },
+  activeLanguageText: {
+    color: "#FFFFFF",
+  },
+  codeContainer: {
+    backgroundColor: "#242033",
+    borderRadius: 16,
+    padding: 18,
+    marginBottom: 24,
+  },
+  codeLabel: {
+    fontSize: 11,
+    fontWeight: "800",
+    color: "#C8B9FA",
+    marginBottom: 14,
+    letterSpacing: 1,
+  },
+  codeText: {
+    fontFamily: "monospace",
+    fontSize: 13,
+    color: "#FFFFFF",
+    lineHeight: 22,
+  },
 });

@@ -92,7 +92,7 @@ const chapters = [
 
 export default function LearnScreen() {
   const router = useRouter();
-  
+
   const [expandedChapter, setExpandedChapter] =
     useState<number | null>(0);
 
@@ -159,9 +159,12 @@ export default function LearnScreen() {
                     key={lessonIndex}
                     style={styles.lessonRow}
                     onPress={() => {
-                      if (chapterIndex === 0 && lessonIndex === 0){
-                        router.push("/lesson");
-                      }
+                        if (chapterIndex === 0 && lessonIndex === 0) {
+                            router.push({
+                                pathname: "/lesson",
+                                params: { id: "what-is-programming" },
+                            });
+                        }
                     }}
                   >
                     <View style={styles.lessonCircle}>
