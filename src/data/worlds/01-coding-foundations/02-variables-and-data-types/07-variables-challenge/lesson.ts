@@ -107,6 +107,43 @@ export const variablesChallenge: Lesson = {
       explanation:
         "The program multiplies 5 by 4 and displays 20.",
     },
+
+{
+  type: "code-builder",
+  title: "Build the Complete Checkout! 🛒",
+  question:
+    "A store sells items for $5 each. Build a checkout program that reads the quantity, calculates the subtotal, subtracts a $3 discount, and displays the final price.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY finalTotal",
+      "SET finalTotal = subtotal - 3",
+      "INPUT quantity",
+      "SET subtotal = price * quantity",
+      "SET price = 5",
+      "SET quantity = 0",
+    ],
+    c: [
+      'printf("%d", finalTotal);',
+      "int finalTotal = subtotal - 3;",
+      'scanf("%d", &quantity);',
+      "int subtotal = price * quantity;",
+      "int price = 5;",
+      "int quantity = 0;",
+    ],
+    cpp: [
+      "cout << finalTotal;",
+      "int finalTotal = subtotal - 3;",
+      "cin >> quantity;",
+      "int subtotal = price * quantity;",
+      "int price = 5;",
+      "int quantity = 0;",
+    ],
+  },
+  correctBlockOrder: [4, 5, 2, 3, 1, 0],
+  explanation:
+    "You built a complete checkout sequence! The program creates its variables, reads the quantity, calculates the subtotal, applies a $3 discount, and displays the final price.",
+},
+
   ],
 
   codeExamples: {

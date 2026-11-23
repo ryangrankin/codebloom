@@ -49,6 +49,34 @@ export const whatIsAVariable: Lesson = {
       explanation:
         "First create the variable, then store a value in it, and finally display that value.",
     },
+
+{
+  type: "code-builder",
+  title: "Build a Player Profile! 🎮",
+  question:
+    "You're creating a game! Build a program that stores a player's score and number of lives, then displays their score. Arrange the code blocks in the correct order.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY score",
+      "SET lives = 3",
+      "SET score = 10",
+    ],
+    c: [
+      'printf("%d", score);',
+      "int lives = 3;",
+      "int score = 10;",
+    ],
+    cpp: [
+      "cout << score;",
+      "int lives = 3;",
+      "int score = 10;",
+    ],
+  },
+  correctBlockOrder: [2, 1, 0],
+  explanation:
+    "Great job! You created two variables: score stores 10, and lives stores 3. Then you displayed the player's score.",
+},
+
     {
       type: "code-input",
       title: "Write Your First Variable!",

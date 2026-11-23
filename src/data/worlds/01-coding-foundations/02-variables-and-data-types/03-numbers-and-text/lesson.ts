@@ -51,6 +51,37 @@ export const numbersAndText: Lesson = {
       correctAnswer: 0,
       explanation: "A char stores a single character using single quotes.",
     },
+
+{
+  type: "code-builder",
+  title: "Build a Student Profile! 🎓",
+  question:
+    "Create a student's age, GPA, and letter grade, then display the GPA. Arrange the code blocks in the correct order.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY gpa",
+      'SET grade = "A"',
+      "SET gpa = 3.8",
+      "SET age = 20",
+    ],
+    c: [
+      'printf("%.1f", gpa);',
+      "char grade = 'A';",
+      "double gpa = 3.8;",
+      "int age = 20;",
+    ],
+    cpp: [
+      "cout << gpa;",
+      "char grade = 'A';",
+      "double gpa = 3.8;",
+      "int age = 20;",
+    ],
+  },
+  correctBlockOrder: [3, 2, 1, 0],
+  explanation:
+    "Great work! You used int for a whole number, double for a decimal, and char for a single character. Then you displayed the GPA of 3.8.",
+},
+
     {
       type: "code-input",
       title: "Store a Letter",

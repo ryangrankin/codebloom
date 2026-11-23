@@ -52,6 +52,34 @@ export const creatingVariables: Lesson = {
       correctAnswer: 1,
       explanation: "The assignment operator stores a value in a variable.",
     },
+
+{
+  type: "code-builder",
+  title: "Build a Game Profile! 🎮",
+  question:
+    "You're building a game profile. Create a player's level and score, then display their score. Arrange the code blocks in the correct order.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY score",
+      "SET level = 5",
+      "SET score = 100",
+    ],
+    c: [
+      'printf("%d", score);',
+      "int level = 5;",
+      "int score = 100;",
+    ],
+    cpp: [
+      "cout << score;",
+      "int level = 5;",
+      "int score = 100;",
+    ],
+  },
+  correctBlockOrder: [1, 2, 0],
+  explanation:
+    "You created two integer variables! The level variable stores 5, and score stores 100. The program then displays the score.",
+},
+
     {
       type: "code-input",
       title: "Create a Score Variable",

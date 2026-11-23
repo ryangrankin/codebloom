@@ -51,6 +51,37 @@ export const changingVariableValues: Lesson = {
       explanation:
         "The program adds 1 to the current value of 3, producing 4.",
     },
+
+{
+  type: "code-builder",
+  title: "Build a Score Tracker! 🎮",
+  question:
+    "A player starts with 10 points, earns 5 more, and then loses 3 points. Build a program that updates the score and displays the final result.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY points",
+      "SET points = points - 3",
+      "SET points = 10",
+      "SET points = points + 5",
+    ],
+    c: [
+      'printf("%d", points);',
+      "points = points - 3;",
+      "int points = 10;",
+      "points = points + 5;",
+    ],
+    cpp: [
+      "cout << points;",
+      "points = points - 3;",
+      "int points = 10;",
+      "points = points + 5;",
+    ],
+  },
+  correctBlockOrder: [2, 3, 1, 0],
+  explanation:
+    "Great job! The player starts with 10 points, earns 5 to reach 15, and then loses 3. The final score is 12.",
+},
+
     {
       type: "code-input",
       title: "Add Points",

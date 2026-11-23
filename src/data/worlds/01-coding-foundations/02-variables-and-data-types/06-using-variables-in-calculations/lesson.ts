@@ -61,6 +61,40 @@ export const usingVariablesInCalculations: Lesson = {
       explanation:
         "Integer division discards the fractional part. To get 3.5, at least one operand must be a floating-point value.",
     },
+
+{
+  type: "code-builder",
+  title: "Build a Shopping Cart! 🛒",
+  question:
+    "A customer buys 3 items costing $5 each and receives a $2 discount. Build a program that calculates the subtotal, applies the discount, and displays the final price.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY finalTotal",
+      "SET finalTotal = subtotal - 2",
+      "SET quantity = 3",
+      "SET subtotal = price * quantity",
+      "SET price = 5",
+    ],
+    c: [
+      'printf("%d", finalTotal);',
+      "int finalTotal = subtotal - 2;",
+      "int quantity = 3;",
+      "int subtotal = price * quantity;",
+      "int price = 5;",
+    ],
+    cpp: [
+      "cout << finalTotal;",
+      "int finalTotal = subtotal - 2;",
+      "int quantity = 3;",
+      "int subtotal = price * quantity;",
+      "int price = 5;",
+    ],
+  },
+  correctBlockOrder: [4, 2, 3, 1, 0],
+  explanation:
+    "You calculated the subtotal (5 × 3 = 15), subtracted the $2 discount, and displayed the final price of $13!",
+},
+
     {
       type: "code-input",
       title: "Calculate an Average",

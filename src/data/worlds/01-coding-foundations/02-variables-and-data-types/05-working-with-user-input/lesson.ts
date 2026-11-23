@@ -53,6 +53,34 @@ export const workingWithUserInput: Lesson = {
       explanation:
         "Great! Your statement reads an integer entered by the user.",
     },
+
+{
+  type: "code-builder",
+  title: "Build an Age Checker! 🎂",
+  question:
+    "Build a program that asks the user for their age, stores their answer, and displays it. Arrange the code blocks in the correct order.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY age",
+      "INPUT age",
+      'DISPLAY "Enter your age:"',
+    ],
+    c: [
+      'printf("%d", age);',
+      'scanf("%d", &age);',
+      'int age; printf("Enter your age: ");',
+    ],
+    cpp: [
+      "cout << age;",
+      "cin >> age;",
+      'int age; cout << "Enter your age: ";',
+    ],
+  },
+  correctBlockOrder: [2, 1, 0],
+  explanation:
+    "You built an interactive program! First, it asks for an age, then reads the user's input, and finally displays the value they entered.",
+},
+
     {
       type: "code-input",
       title: "Read a Quantity",
