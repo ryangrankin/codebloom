@@ -20,6 +20,59 @@ type LessonStep = {
   explanation?: string;
 };
 
+type CodeLanguage = "pseudo" | "c" | "cpp";
+
+const codeExamples: Record<CodeLanguage, string> = {
+  pseudo: `INPUT number
+result ← number * 2
+OUTPUT result`,
+
+  c: `#include <stdio.h>
+
+int main() {
+  int number;
+  scanf("%d", &number);
+
+  int result = number * 2;
+  printf("%d", result);
+
+  return 0;
+}`,
+
+  cpp: `#include <iostream>
+using namespace std;
+
+int main() {
+  int number;
+  cin >> number;
+
+  int result = number * 2;
+  cout << result;
+
+  return 0;
+}`,
+};
+
+const orderingOptions: Record<CodeLanguage, string[]> = {
+  pseudo: [
+    "OUTPUT result",
+    "INPUT number",
+    "result ← number * 2",
+  ],
+
+  c: [
+    'printf("%d", result);',
+    'scanf("%d", &number);',
+    "int result = number * 2;",
+  ],
+
+  cpp: [
+    "cout << result;",
+    "cin >> number;",
+    "int result = number * 2;",
+  ],
+};
+
 const lessonSteps: LessonStep[] = [
   {
     type: "explanation",
@@ -90,6 +143,9 @@ export default function LessonScreen() {
   );
   const [checked, setChecked] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<number[]>([]);
+  const [language, setLanguage] = useState<"pseudo" | "c" | "cpp">(
+    "pseudo"
+  );
 
   const isComplete = stepIndex >= lessonSteps.length;
   const step = lessonSteps[stepIndex];
@@ -104,6 +160,12 @@ export default function LessonScreen() {
     setChecked(false);
     setSelectedOrder([]);
   }
+  function resetLesson() {
+  setStepIndex(0);
+  setSelectedAnswer(null);
+  setSelectedOrder([]);
+  setChecked(false);
+}
 
   if (isComplete) {
     return (
@@ -117,7 +179,10 @@ export default function LessonScreen() {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => router.replace("/learn")}
+          onPress={() => {
+                resetLesson();
+                router.replace("/learn");
+            }}
         >
           <Text style={styles.buttonText}>Back to Learning Path</Text>
         </TouchableOpacity>
@@ -132,7 +197,12 @@ export default function LessonScreen() {
       style={styles.container}
       contentContainerStyle={styles.content}
     >
-      <TouchableOpacity onPress={() => router.back()}>
+      <TouchableOpacity
+        onPress={() => {
+             resetLesson();
+            router.replace("/learn");
+        }}
+    >
         <Text style={styles.backButton}>← Exit Lesson</Text>
       </TouchableOpacity>
 
@@ -151,6 +221,37 @@ export default function LessonScreen() {
       </Text>
 
       <Text style={styles.title}>{step.title}</Text>
+      <View style={styles.languageContainer}>
+  <Text style={styles.languageLabel}>VIEW CODE AS</Text>
+
+  <View style={styles.languageToggle}>
+    {[
+      { label: "Pseudocode", value: "pseudo" },
+      { label: "C", value: "c" },
+      { label: "C++", value: "cpp" },
+    ].map((option) => (
+      <TouchableOpacity
+        key={option.value}
+        style={[
+          styles.languageOption,
+          language === option.value && styles.activeLanguageOption,
+        ]}
+        onPress={() =>
+          setLanguage(option.value as "pseudo" | "c" | "cpp")
+        }
+      >
+        <Text
+          style={[
+            styles.languageOptionText,
+            language === option.value && styles.activeLanguageText,
+          ]}
+        >
+          {option.label}
+        </Text>
+      </TouchableOpacity>
+    ))}
+  </View>
+</View>
 
       {step.type === "explanation" && (
         <View style={styles.card}>
@@ -160,6 +261,21 @@ export default function LessonScreen() {
 
       {step.type === "ordering" && (
   <View>
+    <View style={styles.codeContainer}>
+  <Text style={styles.codeLabel}>
+    {language === "pseudo"
+      ? "PSEUDOCODE"
+      : language === "c"
+      ? "C"
+      : "C++"}
+  </Text>
+
+  <ScrollView horizontal>
+    <Text style={styles.codeText}>
+      {codeExamples[language]}
+    </Text>
+  </ScrollView>
+</View>
     <Text style={styles.question}>{step.question}</Text>
 
     <Text style={styles.orderLabel}>Your sequence:</Text>
@@ -182,7 +298,7 @@ export default function LessonScreen() {
             }
           >
             <Text style={styles.optionText}>
-              {position + 1}. {step.options?.[index]} ✕
+              {position + 1}. {orderingOptions[language][index]} ✕ ✕
             </Text>
           </TouchableOpacity>
         ))
@@ -191,7 +307,7 @@ export default function LessonScreen() {
 
     <Text style={styles.orderLabel}>Available instructions:</Text>
 
-     {step.options?.map((option, index) =>
+     {orderingOptions[language].map((option, index) =>
        selectedOrder.includes(index) ? null : (
           <TouchableOpacity
              key={index}
@@ -274,12 +390,12 @@ export default function LessonScreen() {
     style={[
       styles.button,
       (step.type === "ordering"
-        ? selectedOrder.length !== step.options?.length
+        ? selectedOrder.length !== orderingOptions[language].length
         : selectedAnswer === null) && styles.disabledButton,
     ]}
     disabled={
       step.type === "ordering"
-        ? selectedOrder.length !== step.options?.length
+        ? selectedOrder.length !== orderingOptions[language].length
         : selectedAnswer === null
     }
     onPress={() => setChecked(true)}
@@ -467,6 +583,58 @@ orderItem: {
 placeholder: {
   fontSize: 14,
   color: "#847A91",
+  lineHeight: 22,
+},
+languageContainer: {
+  marginBottom: 24,
+},
+languageLabel: {
+  fontSize: 11,
+  fontWeight: "800",
+  color: "#9162E4",
+  letterSpacing: 1,
+  marginBottom: 10,
+},
+languageToggle: {
+  flexDirection: "row",
+  backgroundColor: "#EDE3F8",
+  borderRadius: 14,
+  padding: 4,
+},
+languageOption: {
+  flex: 1,
+  paddingVertical: 12,
+  alignItems: "center",
+  borderRadius: 11,
+},
+activeLanguageOption: {
+  backgroundColor: "#9162E4",
+},
+languageOptionText: {
+  fontSize: 13,
+  fontWeight: "700",
+  color: "#685779",
+},
+activeLanguageText: {
+  color: "#FFFFFF",
+},
+codeContainer: {
+  backgroundColor: "#242033",
+  borderRadius: 16,
+  padding: 18,
+  marginBottom: 24,
+},
+codeLabel: {
+  fontSize: 11,
+  fontWeight: "800",
+  color: "#C8B9FA",
+  marginBottom: 14,
+  letterSpacing: 1,
+},
+codeText: {
+  fontFamily: "monospace",
+  fontSize: 13,
+  color: "#FFFFFF",
   lineHeight: 22,
 },
 });
