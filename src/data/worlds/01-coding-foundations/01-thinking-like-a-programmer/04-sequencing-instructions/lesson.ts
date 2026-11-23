@@ -60,6 +60,33 @@ export const sequencingInstructions: Lesson = {
       explanation:
         "Instructions execute in order. If DISPLAY happens before the addition, the program shows the original value rather than the updated one.",
     },
+
+    {
+  type: "code-builder",
+  title: "Build Your First Program",
+  question:
+    "Arrange the instructions to create a score, increase it, and display the result.",
+  codeBlocks: {
+    pseudo: [
+      "PRINT score",
+      "SET score = 10",
+      "SET score = score + 5",
+    ],
+    c: [
+      'printf("%d", score);',
+      "int score = 10;",
+      "score += 5;",
+    ],
+    cpp: [
+      "cout << score;",
+      "int score = 10;",
+      "score += 5;",
+    ],
+  },
+  correctBlockOrder: [1, 2, 0],
+  explanation:
+    "You initialized the score, updated it, and then displayed the result!",
+},
   ],
 
   codeExamples: {
@@ -106,4 +133,6 @@ int main() {
       "number = number + 3;",
     ],
   },
+
+  
 };

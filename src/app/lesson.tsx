@@ -10,6 +10,7 @@ import {
     View,
 } from "react-native";
 
+import CodeBuilder from "../components/CodeBuilder";
 import { validateCode } from "../data/codeValidator";
 import { getLesson } from "../data/lessonRegistry";
 import {
@@ -154,6 +155,16 @@ function setCodeAnswer(value: string) {
   const isOrdering = step?.type === "ordering";
   const isQuiz = step?.type === "quiz";
   const isCodeInput = step?.type === "code-input";
+  const isCodeBuilder = step?.type === "code-builder";
+
+const currentCodeBlocks = isCodeBuilder
+  ? step.codeBlocks?.[language] ?? []
+  : [];
+
+const builderIsCorrect =
+  isCodeBuilder &&
+  JSON.stringify(selectedOrder) ===
+    JSON.stringify(step?.correctBlockOrder);
 
   const currentOrderingOptions =
     lesson?.orderingOptions?.[language] ??
@@ -179,7 +190,9 @@ const codeValidation = isCodeInput
 const codeIsCorrect =
   isCodeInput && (codeValidation?.correct ?? false);
 
-  const isCorrect = isOrdering
+const isCorrect = isCodeBuilder
+  ? builderIsCorrect
+  : isOrdering
     ? orderingIsCorrect
     : isQuiz
       ? answerIsCorrect
@@ -187,7 +200,10 @@ const codeIsCorrect =
         ? codeIsCorrect
         : true;
 
-  const canCheck = isOrdering
+  const canCheck = isCodeBuilder
+  ? currentCodeBlocks.length > 0 &&
+    selectedOrder.length === currentCodeBlocks.length
+  : isOrdering
     ? currentOrderingOptions.length > 0 &&
       selectedOrder.length === currentOrderingOptions.length
     : isQuiz
@@ -249,7 +265,7 @@ function changeLanguage(nextLanguage: CodeLanguage) {
 
   setLanguage(nextLanguage);
 
-  if (isOrdering || isCodeInput) {
+  if (isOrdering || isCodeInput || isCodeBuilder) {
     setSelectedOrder([]);
     setChecked(false);
     setAttempts(0);
@@ -538,6 +554,28 @@ function changeLanguage(nextLanguage: CodeLanguage) {
           )}
         </View>
       )}
+
+      {/* Code Builder exercise */}
+        {isCodeBuilder && (
+            <View>
+                <Text style={styles.question}>
+                 {step.question}
+                </Text>
+
+                 <CodeBuilder
+                     blocks={currentCodeBlocks}
+                     selectedOrder={selectedOrder}
+                     onChange={setSelectedOrder}
+                     disabled={checked}
+                    />
+
+                {renderFeedback(
+                 "Great job building your program!",
+                 "Not quite! Check the order of your code blocks."
+                )}
+            </View>
+        )}
+
 
       {/* Code-writing exercise */}
       {isCodeInput && (
