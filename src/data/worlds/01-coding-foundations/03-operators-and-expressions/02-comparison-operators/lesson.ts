@@ -50,6 +50,34 @@ export const comparisonOperators: Lesson = {
       },
       "explanation": "You built the expression correctly!"
     },
+
+{
+  type: "code-builder",
+  title: "Build a Theme Park Checker! 🎢",
+  question:
+    "A theme park ride requires visitors to be at least 12 years old. Build a program that stores a visitor's age, checks whether they're old enough, and displays the result.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY canRide",
+      "SET canRide = age >= 12",
+      "SET age = 14",
+    ],
+    c: [
+      'printf("%d", canRide);',
+      "int canRide = age >= 12;",
+      "int age = 14;",
+    ],
+    cpp: [
+      "cout << canRide;",
+      "bool canRide = age >= 12;",
+      "int age = 14;",
+    ],
+  },
+  correctBlockOrder: [2, 1, 0],
+  explanation:
+    "Great work! The visitor is 14, which is greater than or equal to 12. The comparison evaluates to true. In C, true is represented by 1; in C++, cout also displays true as 1 by default.",
+},
+
     {
       "type": "code-input",
       "title": "Apply What You Learned",

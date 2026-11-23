@@ -70,7 +70,47 @@ export const operatorsChallenge: Lesson = {
         ]
       },
       "explanation": "You combined arithmetic operators and used the result of one calculation in another!"
-    }
+    },
+
+{
+  type: "code-builder",
+  title: "Build a Game Reward Calculator! 🏆",
+  question:
+    "A player starts with 10 points, collects 4 coins worth 5 points each, earns a 10-point bonus, and then loses 3 points. Arrange the code blocks to calculate and display the final score.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY score",
+      "SET score = score - 3",
+      "SET score = score + bonus",
+      "SET bonus = 10",
+      "SET score = score + coins * 5",
+      "SET coins = 4",
+      "SET score = 10",
+    ],
+    c: [
+      'printf("%d", score);',
+      "score -= 3;",
+      "score += bonus;",
+      "int bonus = 10;",
+      "score += coins * 5;",
+      "int coins = 4;",
+      "int score = 10;",
+    ],
+    cpp: [
+      "cout << score;",
+      "score -= 3;",
+      "score += bonus;",
+      "int bonus = 10;",
+      "score += coins * 5;",
+      "int coins = 4;",
+      "int score = 10;",
+    ],
+  },
+  correctBlockOrder: [6, 5, 4, 3, 2, 1, 0],
+  explanation:
+    "Excellent! You started with 10 points, earned 20 from coins, added a 10-point bonus, and lost 3 points. Your final score is 37!",
+},
+
   ],
   "codeExamples": {
     "pseudo": "SET score = coins + levels * 10",

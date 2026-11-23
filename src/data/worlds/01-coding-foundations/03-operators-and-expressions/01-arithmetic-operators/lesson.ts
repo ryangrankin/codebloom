@@ -48,6 +48,43 @@ export const arithmeticOperators: Lesson = {
       },
       "explanation": "You built the expression correctly!"
     },
+
+{
+  type: "code-builder",
+  title: "Build a Pizza Party Calculator! 🍕",
+  question:
+    "You're organizing a pizza party! You have 17 slices and 5 friends. Build a program that calculates how many slices each friend gets and how many slices are left over.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY leftover",
+      "SET leftover = slices % friends",
+      "SET friends = 5",
+      "SET slices = 17",
+      "SET each = slices / friends",
+      "DISPLAY each",
+    ],
+    c: [
+      'printf("%d", leftover);',
+      "int leftover = slices % friends;",
+      "int friends = 5;",
+      "int slices = 17;",
+      "int each = slices / friends;",
+      'printf("%d", each);',
+    ],
+    cpp: [
+      "cout << leftover;",
+      "int leftover = slices % friends;",
+      "int friends = 5;",
+      "int slices = 17;",
+      "int each = slices / friends;",
+      "cout << each;",
+    ],
+  },
+  correctBlockOrder: [3, 2, 4, 1, 5, 0],
+  explanation:
+    "Great work! Integer division gives each friend 3 slices (17 / 5 = 3), and modulo finds the 2 leftover slices (17 % 5 = 2).",
+},
+
     {
       "type": "code-input",
       "title": "Apply What You Learned",

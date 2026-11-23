@@ -48,6 +48,40 @@ export const assignmentOperators: Lesson = {
       },
       "explanation": "You built the expression correctly!"
     },
+
+{
+  type: "code-builder",
+  title: "Build a Score Multiplier! 🎮",
+  question:
+    "A player starts with 10 points, earns 5 bonus points, doubles their score, and then loses 4 points. Arrange the code blocks to calculate and display the final score.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY score",
+      "SET score = score - 4",
+      "SET score = score * 2",
+      "SET score = 10",
+      "SET score = score + 5",
+    ],
+    c: [
+      'printf("%d", score);',
+      "score -= 4;",
+      "score *= 2;",
+      "int score = 10;",
+      "score += 5;",
+    ],
+    cpp: [
+      "cout << score;",
+      "score -= 4;",
+      "score *= 2;",
+      "int score = 10;",
+      "score += 5;",
+    ],
+  },
+  correctBlockOrder: [3, 4, 2, 1, 0],
+  explanation:
+    "You started with 10 points, added 5 to reach 15, multiplied by 2 to reach 30, and subtracted 4. The final score is 26!",
+},
+
     {
       "type": "code-input",
       "title": "Apply What You Learned",

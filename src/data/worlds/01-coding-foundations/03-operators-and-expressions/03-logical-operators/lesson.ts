@@ -50,6 +50,37 @@ export const logicalOperators: Lesson = {
       },
       "explanation": "You built the expression correctly!"
     },
+
+{
+  type: "code-builder",
+  title: "Build a Concert Entry Checker! 🎟️",
+  question:
+    "A concert requires visitors to be at least 18 years old AND have a ticket. Build a program that checks both requirements and displays whether a visitor can enter.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY canEnter",
+      "SET canEnter = age >= 18 AND hasTicket",
+      "SET hasTicket = TRUE",
+      "SET age = 20",
+    ],
+    c: [
+      'printf("%d", canEnter);',
+      "int canEnter = age >= 18 && hasTicket;",
+      "int hasTicket = 1;",
+      "int age = 20;",
+    ],
+    cpp: [
+      "cout << canEnter;",
+      "bool canEnter = age >= 18 && hasTicket;",
+      "bool hasTicket = true;",
+      "int age = 20;",
+    ],
+  },
+  correctBlockOrder: [3, 2, 1, 0],
+  explanation:
+    "Great job! The visitor is 20 years old and has a ticket. Both conditions are true, so canEnter is true. AND requires both conditions to be true.",
+},
+
     {
       "type": "code-input",
       "title": "Apply What You Learned",

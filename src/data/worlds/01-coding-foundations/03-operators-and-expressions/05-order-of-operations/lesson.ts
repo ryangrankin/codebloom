@@ -48,6 +48,40 @@ export const orderOfOperations: Lesson = {
       },
       "explanation": "You built the expression correctly!"
     },
+
+{
+  type: "code-builder",
+  title: "Build a Movie Ticket Calculator! 🎬",
+  question:
+    "Movie tickets cost $12 each, but everyone gets a $2 discount per ticket. A group of 4 friends is going. Build a program that calculates the total using parentheses to apply the discount before multiplying.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY total",
+      "SET total = (price - discount) * friends",
+      "SET friends = 4",
+      "SET discount = 2",
+      "SET price = 12",
+    ],
+    c: [
+      'printf("%d", total);',
+      "int total = (price - discount) * friends;",
+      "int friends = 4;",
+      "int discount = 2;",
+      "int price = 12;",
+    ],
+    cpp: [
+      "cout << total;",
+      "int total = (price - discount) * friends;",
+      "int friends = 4;",
+      "int discount = 2;",
+      "int price = 12;",
+    ],
+  },
+  correctBlockOrder: [4, 3, 2, 1, 0],
+  explanation:
+    "Great work! Parentheses calculate the discounted ticket price first: 12 - 2 = 10. Then the program multiplies by 4 friends to get a total of $40.",
+},
+
     {
       "type": "code-input",
       "title": "Apply What You Learned",
