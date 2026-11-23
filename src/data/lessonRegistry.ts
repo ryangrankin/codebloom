@@ -14,7 +14,13 @@ import { changingVariableValues } from "./worlds/01-coding-foundations/02-variab
 import { workingWithUserInput } from "./worlds/01-coding-foundations/02-variables-and-data-types/05-working-with-user-input/lesson";
 import { usingVariablesInCalculations } from "./worlds/01-coding-foundations/02-variables-and-data-types/06-using-variables-in-calculations/lesson";
 import { variablesChallenge } from "./worlds/01-coding-foundations/02-variables-and-data-types/07-variables-challenge/lesson";
-
+import { arithmeticOperators } from "./worlds/01-coding-foundations/03-operators-and-expressions/01-arithmetic-operators/lesson";
+import { comparisonOperators } from "./worlds/01-coding-foundations/03-operators-and-expressions/02-comparison-operators/lesson";
+import { logicalOperators } from "./worlds/01-coding-foundations/03-operators-and-expressions/03-logical-operators/lesson";
+import { assignmentOperators } from "./worlds/01-coding-foundations/03-operators-and-expressions/04-assignment-operators/lesson";
+import { orderOfOperations } from "./worlds/01-coding-foundations/03-operators-and-expressions/05-order-of-operations/lesson";
+import { buildingExpressions } from "./worlds/01-coding-foundations/03-operators-and-expressions/06-building-expressions/lesson";
+import { operatorsChallenge } from "./worlds/01-coding-foundations/03-operators-and-expressions/07-operators-challenge/lesson";
 
 export const lessonRegistry: Record<string, Lesson> = {
   "what-is-programming": whatIsProgramming,
@@ -30,6 +36,13 @@ export const lessonRegistry: Record<string, Lesson> = {
   "working-with-user-input": workingWithUserInput,
   "using-variables-in-calculations": usingVariablesInCalculations,
   "variables-challenge": variablesChallenge,
+  [arithmeticOperators.id]: arithmeticOperators,
+  [comparisonOperators.id]: comparisonOperators,
+  [logicalOperators.id]: logicalOperators,
+  [assignmentOperators.id]: assignmentOperators,
+  [orderOfOperations.id]: orderOfOperations,
+  [buildingExpressions.id]: buildingExpressions,
+  [operatorsChallenge.id]: operatorsChallenge,
 };
 
 

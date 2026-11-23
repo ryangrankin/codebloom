@@ -27,26 +27,51 @@ const chapters = [
       { id: "plan-an-algorithm", title: "Plan an Algorithm" },
     ],
   },
+  
+{
+  title: "Variables & Data Types",
+  lessons: [
+    {
+      id: "what-is-a-variable",
+      title: "What Is a Variable?",
+    },
+    {
+      id: "creating-variables",
+      title: "Creating Variables",
+    },
+    {
+      id: "numbers-and-text",
+      title: "Numbers and Text",
+    },
+    {
+      id: "changing-variable-values",
+      title: "Changing Variable Values",
+    },
+    {
+      id: "working-with-user-input",
+      title: "Working with User Input",
+    },
+    {
+      id: "using-variables-in-calculations",
+      title: "Using Variables in Calculations",
+    },
+    {
+      id: "variables-challenge",
+      title: "Variables & Data Types Challenge",
+    },
+  ],
+},
+
   {
-    title: "Variables & Data Types",
+    title: "Operators & Expressions",
     lessons: [
-      { id: "what-is-a-variable", title: "What Is a Variable?" },
-      { id: "integers-and-decimal-numbers", title: "Integers and Decimal Numbers" },
-      { id: "characters-and-strings", title: "Characters and Strings" },
-      { id: "boolean-values", title: "Boolean Values" },
-      { id: "updating-variables", title: "Updating Variables" },
-      { id: "track-a-score", title: "Track a Score" },
-    ],
-  },
-  {
-    title: "Input, Output & Operators",
-    lessons: [
-      { id: "displaying-output", title: "Displaying Output" },
-      { id: "reading-user-input", title: "Reading User Input" },
       { id: "arithmetic-operators", title: "Arithmetic Operators" },
       { id: "comparison-operators", title: "Comparison Operators" },
       { id: "logical-operators", title: "Logical Operators" },
-      { id: "simple-calculator", title: "Simple Calculator" },
+      { id: "assignment-operators", title: "Assignment Operators" },
+      { id: "order-of-operations", title: "Order of Operations" },
+      { id: "building-expressions", title: "Building Expressions" },
+      { id: "operators-challenge", title: "Operators Challenge" },
     ],
   },
   {
