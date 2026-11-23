@@ -21,6 +21,14 @@ import { assignmentOperators } from "./worlds/01-coding-foundations/03-operators
 import { orderOfOperations } from "./worlds/01-coding-foundations/03-operators-and-expressions/05-order-of-operations/lesson";
 import { buildingExpressions } from "./worlds/01-coding-foundations/03-operators-and-expressions/06-building-expressions/lesson";
 import { operatorsChallenge } from "./worlds/01-coding-foundations/03-operators-and-expressions/07-operators-challenge/lesson";
+import { trueAndFalseExpressions } from "./worlds/01-coding-foundations/04-conditions-and-decisions/01-true-and-false-expressions/lesson";
+import { ifStatements } from "./worlds/01-coding-foundations/04-conditions-and-decisions/02-if-statements/lesson";
+import { elseAndElseIf } from "./worlds/01-coding-foundations/04-conditions-and-decisions/03-else-and-else-if/lesson";
+import { nestedConditions } from "./worlds/01-coding-foundations/04-conditions-and-decisions/04-nested-conditions/lesson";
+import { combiningConditions } from "./worlds/01-coding-foundations/04-conditions-and-decisions/05-combining-conditions/lesson";
+import { gradeCalculator } from "./worlds/01-coding-foundations/04-conditions-and-decisions/06-grade-calculator/lesson";
+
+
 
 export const lessonRegistry: Record<string, Lesson> = {
   "what-is-programming": whatIsProgramming,
@@ -43,6 +51,12 @@ export const lessonRegistry: Record<string, Lesson> = {
   [orderOfOperations.id]: orderOfOperations,
   [buildingExpressions.id]: buildingExpressions,
   [operatorsChallenge.id]: operatorsChallenge,
+  [trueAndFalseExpressions.id]: trueAndFalseExpressions,
+  [ifStatements.id]: ifStatements,
+  [elseAndElseIf.id]: elseAndElseIf,
+  [nestedConditions.id]: nestedConditions,
+  [combiningConditions.id]: combiningConditions,
+  [gradeCalculator.id]: gradeCalculator,
 };
 
 
