@@ -34,6 +34,15 @@ import { loopCounters } from "./worlds/01-coding-foundations/05-loops-and-repeti
 import { nestedLoops } from "./worlds/01-coding-foundations/05-loops-and-repetition/05-nested-loops/lesson";
 import { infiniteLoops } from "./worlds/01-coding-foundations/05-loops-and-repetition/06-infinite-loops/lesson";
 import { numberPatterns } from "./worlds/01-coding-foundations/05-loops-and-repetition/07-number-patterns/lesson";
+import { whyFunctionsMatter } from "./worlds/01-coding-foundations/06-functions/01-why-functions-matter/lesson";
+import { definingFunctions } from "./worlds/01-coding-foundations/06-functions/02-defining-functions/lesson";
+import { parametersAndArguments } from "./worlds/01-coding-foundations/06-functions/03-parameters-and-arguments/lesson";
+import { returnValues } from "./worlds/01-coding-foundations/06-functions/04-return-values/lesson";
+import { variableScope } from "./worlds/01-coding-foundations/06-functions/05-variable-scope/lesson";
+import { combiningFunctions } from "./worlds/01-coding-foundations/06-functions/06-combining-functions/lesson";
+import { buildAMiniProgram } from "./worlds/01-coding-foundations/06-functions/07-build-a-mini-program/lesson";
+
+
 
 
 export const lessonRegistry: Record<string, Lesson> = {
@@ -70,6 +79,13 @@ export const lessonRegistry: Record<string, Lesson> = {
   [nestedLoops.id]: nestedLoops,
   [infiniteLoops.id]: infiniteLoops,
   [numberPatterns.id]: numberPatterns,
+  [whyFunctionsMatter.id]: whyFunctionsMatter,
+  [definingFunctions.id]: definingFunctions,
+  [parametersAndArguments.id]: parametersAndArguments,
+  [returnValues.id]: returnValues,
+  [variableScope.id]: variableScope,
+  [combiningFunctions.id]: combiningFunctions,
+  [buildAMiniProgram.id]: buildAMiniProgram,
 };
 
 
