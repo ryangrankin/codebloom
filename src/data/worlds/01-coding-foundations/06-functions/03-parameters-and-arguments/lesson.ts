@@ -47,6 +47,37 @@ export const parametersAndArguments: Lesson = {
       },
       "explanation": "Great job defining your function!"
     },
+
+{
+  type: "code-builder",
+  title: "Build a Movie Ticket Calculator! 🎬",
+  question:
+    "Movie tickets cost $12 each. Create a function named ticketCost that takes the number of tickets as a parameter and returns the total price. Then call the function with 3 tickets and display the result.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY ticketCost(3)",
+      "END FUNCTION",
+      "RETURN tickets * 12",
+      "FUNCTION ticketCost(tickets)",
+    ],
+    c: [
+      'printf("%d", ticketCost(3));',
+      "}",
+      "return tickets * 12;",
+      "int ticketCost(int tickets) {",
+    ],
+    cpp: [
+      "cout << ticketCost(3);",
+      "}",
+      "return tickets * 12;",
+      "int ticketCost(int tickets) {",
+    ],
+  },
+  correctBlockOrder: [3, 2, 1, 0],
+  explanation:
+    "The parameter tickets receives the argument 3 when ticketCost(3) is called. The function multiplies 3 by 12 and returns 36. Parameters make the function reusable because you can call it with different ticket quantities!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

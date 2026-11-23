@@ -47,6 +47,40 @@ export const whyFunctionsMatter: Lesson = {
       },
       "explanation": "Great job defining your function!"
     },
+
+{
+  type: "code-builder",
+  title: "Build a Welcome Bot! 🤖",
+  question:
+    "A welcome bot needs to greet two visitors. Instead of writing the same greeting twice, create a function named greet that prints 'Welcome to CodeBloom!', then call the function two times.",
+  codeBlocks: {
+    pseudo: [
+      "greet()",
+      "END FUNCTION",
+      'PRINT "Welcome to CodeBloom!"',
+      "FUNCTION greet()",
+      "greet()",
+    ],
+    c: [
+      "greet();",
+      "}",
+      'printf("Welcome to CodeBloom!\\n");',
+      "void greet() {",
+      "greet();",
+    ],
+    cpp: [
+      "greet();",
+      "}",
+      'cout << "Welcome to CodeBloom!" << endl;',
+      "void greet() {",
+      "greet();",
+    ],
+  },
+  correctBlockOrder: [3, 2, 1, 4, 0],
+  explanation:
+    "The greet function stores the instructions for displaying a welcome message. Calling greet() twice runs those instructions twice without duplicating the greeting code. That's what makes functions reusable!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

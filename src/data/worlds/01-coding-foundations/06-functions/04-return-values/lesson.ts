@@ -47,6 +47,37 @@ export const returnValues: Lesson = {
       },
       "explanation": "Great job defining your function!"
     },
+
+{
+  type: "code-builder",
+  title: "Build a Discount Calculator! 🛍️",
+  question:
+    "A store gives customers a $10 discount. Create a function named applyDiscount that takes an integer price and returns the price minus 10. Then call the function with 50 and display the result.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY applyDiscount(50)",
+      "END FUNCTION",
+      "RETURN price - 10",
+      "FUNCTION applyDiscount(price)",
+    ],
+    c: [
+      'printf("%d", applyDiscount(50));',
+      "}",
+      "return price - 10;",
+      "int applyDiscount(int price) {",
+    ],
+    cpp: [
+      "cout << applyDiscount(50);",
+      "}",
+      "return price - 10;",
+      "int applyDiscount(int price) {",
+    ],
+  },
+  correctBlockOrder: [3, 2, 1, 0],
+  explanation:
+    "The function receives 50 as its price parameter, subtracts 10, and returns 40. The return statement sends the result back to the caller. The print statement then displays that returned value. Returning and printing are two different actions!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

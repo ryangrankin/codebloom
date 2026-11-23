@@ -47,6 +47,37 @@ export const definingFunctions: Lesson = {
       },
       "explanation": "Great job defining your function!"
     },
+
+{
+  type: "code-builder",
+  title: "Build a Game Score Display! 🏆",
+  question:
+    "A video game needs a function named showScore that displays 'Your score: 100'. Arrange the blocks to define the function, put the message inside it, and call the function to display the score.",
+  codeBlocks: {
+    pseudo: [
+      "showScore()",
+      "END FUNCTION",
+      'PRINT "Your score: 100"',
+      "FUNCTION showScore()",
+    ],
+    c: [
+      "showScore();",
+      "}",
+      'printf("Your score: 100");',
+      "void showScore() {",
+    ],
+    cpp: [
+      "showScore();",
+      "}",
+      'cout << "Your score: 100";',
+      "void showScore() {",
+    ],
+  },
+  correctBlockOrder: [3, 2, 1, 0],
+  explanation:
+    "The function definition tells the program what showScore does. The print statement belongs inside the function body. Calling showScore() executes that code and displays the player's score. Since the function returns no value, it uses void in C and C++.",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

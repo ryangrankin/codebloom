@@ -47,6 +47,46 @@ export const combiningFunctions: Lesson = {
       },
       "explanation": "Great job defining your function!"
     },
+
+{
+  type: "code-builder",
+  title: "Build a Power-Up Calculator! ⚡",
+  question:
+    "A video game has two power-ups. The first doubles a player's score. The second calls the doubling function and adds 10 bonus points. Arrange the blocks to define both functions, then calculate and display the powered-up score for a player with 50 points.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY powerUp(50)",
+      "END FUNCTION",
+      "RETURN doubleScore(score) + 10",
+      "FUNCTION powerUp(score)",
+      "END FUNCTION",
+      "RETURN score * 2",
+      "FUNCTION doubleScore(score)",
+    ],
+    c: [
+      'printf("%d", powerUp(50));',
+      "}",
+      "return doubleScore(score) + 10;",
+      "int powerUp(int score) {",
+      "}",
+      "return score * 2;",
+      "int doubleScore(int score) {",
+    ],
+    cpp: [
+      "cout << powerUp(50);",
+      "}",
+      "return doubleScore(score) + 10;",
+      "int powerUp(int score) {",
+      "}",
+      "return score * 2;",
+      "int doubleScore(int score) {",
+    ],
+  },
+  correctBlockOrder: [6, 5, 4, 3, 2, 1, 0],
+  explanation:
+    "The doubleScore function multiplies the score by 2. The powerUp function calls doubleScore and adds 10 bonus points. When powerUp(50) runs, doubleScore(50) returns 100, then powerUp returns 110. Combining functions lets each function handle one part of a larger problem!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

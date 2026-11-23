@@ -47,6 +47,46 @@ export const buildAMiniProgram: Lesson = {
       },
       "explanation": "Great job defining your function!"
     },
+
+{
+  type: "code-builder",
+  title: "Build a Shopping Checkout Calculator! 🛒",
+  question:
+    "A store needs a checkout program. Create a function named subtotal that multiplies an item's price by its quantity. Then create a function named checkout that calls subtotal and adds a $5 shipping fee. Finally, calculate the cost of 3 items priced at $20 each and display the result.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY checkout(20, 3)",
+      "END FUNCTION",
+      "RETURN subtotal(price, quantity) + 5",
+      "FUNCTION checkout(price, quantity)",
+      "END FUNCTION",
+      "RETURN price * quantity",
+      "FUNCTION subtotal(price, quantity)",
+    ],
+    c: [
+      'printf("%d", checkout(20, 3));',
+      "}",
+      "return subtotal(price, quantity) + 5;",
+      "int checkout(int price, int quantity) {",
+      "}",
+      "return price * quantity;",
+      "int subtotal(int price, int quantity) {",
+    ],
+    cpp: [
+      "cout << checkout(20, 3);",
+      "}",
+      "return subtotal(price, quantity) + 5;",
+      "int checkout(int price, int quantity) {",
+      "}",
+      "return price * quantity;",
+      "int subtotal(int price, int quantity) {",
+    ],
+  },
+  correctBlockOrder: [6, 5, 4, 3, 2, 1, 0],
+  explanation:
+    "The subtotal function multiplies 20 by 3 to get 60. The checkout function calls subtotal and adds 5 for shipping, returning 65. The program then displays 65. By separating the calculation into two functions, the code is easier to reuse and maintain!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",
