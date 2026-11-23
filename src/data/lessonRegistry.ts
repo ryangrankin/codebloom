@@ -4,11 +4,13 @@ import { whatIsProgramming } from "./worlds/01-coding-foundations/01-thinking-li
 
 import { algorithmsInEverydayLife } from "./worlds/01-coding-foundations/01-thinking-like-a-programmer/02-algorithms-in-everyday-life/lesson";
 import { writingYourFirstPseudocode } from "./worlds/01-coding-foundations/01-thinking-like-a-programmer/03-writing-your-first-pseudocode/lesson";
+import { sequencingInstructions } from "./worlds/01-coding-foundations/01-thinking-like-a-programmer/04-sequencing-instructions/lesson";
 
 export const lessonRegistry: Record<string, Lesson> = {
   "what-is-programming": whatIsProgramming,
   "algorithms-in-everyday-life": algorithmsInEverydayLife,
   "writing-your-first-pseudocode": writingYourFirstPseudocode,
+  "sequencing-instructions": sequencingInstructions,
 };
 
 export function getLesson(id: string): Lesson | undefined {
