@@ -1,4 +1,5 @@
 
+import { useRouter } from "expo-router";
 import {
   SafeAreaView,
   ScrollView,
@@ -8,7 +9,10 @@ import {
   View,
 } from "react-native";
 
+
 export default function HomeScreen() {
+  const router = useRouter();
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -49,9 +53,13 @@ export default function HomeScreen() {
             <View style={styles.progressFill} />
           </View>
 
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Start Learning →</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push("/learn")}
+        >
+         <Text style={styles.buttonText}>Start Learning →</Text>
+        </TouchableOpacity>
+         
         </View>
 
         <Text style={styles.sectionTitle}>Your Learning Path</Text>
