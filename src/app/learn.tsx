@@ -1,3 +1,4 @@
+
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
@@ -8,87 +9,94 @@ import {
     View,
 } from "react-native";
 
+import { getLesson } from "../data/lessonRegistry";
+
 const chapters = [
   {
     title: "Thinking Like a Programmer",
     lessons: [
-      "What Is Programming?",
-      "Algorithms in Everyday Life",
-      "Writing Your First Pseudocode",
-      "Sequencing Instructions",
-      "Finding Logical Errors",
-      "Plan an Algorithm",
+      { id: "what-is-programming", title: "What Is Programming?" },
+      { id: "algorithms-in-everyday-life", title: "Algorithms in Everyday Life" },
+      { id: "writing-your-first-pseudocode", title: "Writing Your First Pseudocode" },
+      { id: "sequencing-instructions", title: "Sequencing Instructions" },
+      { id: "finding-logical-errors", title: "Finding Logical Errors" },
+      { id: "plan-an-algorithm", title: "Plan an Algorithm" },
     ],
   },
   {
     title: "Variables & Data Types",
     lessons: [
-      "What Is a Variable?",
-      "Integers and Decimal Numbers",
-      "Characters and Strings",
-      "Boolean Values",
-      "Updating Variables",
-      "Track a Score",
+      { id: "what-is-a-variable", title: "What Is a Variable?" },
+      { id: "integers-and-decimal-numbers", title: "Integers and Decimal Numbers" },
+      { id: "characters-and-strings", title: "Characters and Strings" },
+      { id: "boolean-values", title: "Boolean Values" },
+      { id: "updating-variables", title: "Updating Variables" },
+      { id: "track-a-score", title: "Track a Score" },
     ],
   },
   {
     title: "Input, Output & Operators",
     lessons: [
-      "Displaying Output",
-      "Reading User Input",
-      "Arithmetic Operators",
-      "Comparison Operators",
-      "Logical Operators",
-      "Simple Calculator",
+      { id: "displaying-output", title: "Displaying Output" },
+      { id: "reading-user-input", title: "Reading User Input" },
+      { id: "arithmetic-operators", title: "Arithmetic Operators" },
+      { id: "comparison-operators", title: "Comparison Operators" },
+      { id: "logical-operators", title: "Logical Operators" },
+      { id: "simple-calculator", title: "Simple Calculator" },
     ],
   },
   {
     title: "Conditions & Decisions",
     lessons: [
-      "True and False Expressions",
-      "If Statements",
-      "Else and Else If",
-      "Nested Conditions",
-      "Combining Conditions",
-      "Grade Calculator",
+      { id: "true-and-false-expressions", title: "True and False Expressions" },
+      { id: "if-statements", title: "If Statements" },
+      { id: "else-and-else-if", title: "Else and Else If" },
+      { id: "nested-conditions", title: "Nested Conditions" },
+      { id: "combining-conditions", title: "Combining Conditions" },
+      { id: "grade-calculator", title: "Grade Calculator" },
     ],
   },
   {
     title: "Loops & Repetition",
     lessons: [
-      "Why We Use Loops",
-      "For Loops",
-      "While Loops",
-      "Loop Counters",
-      "Nested Loops",
-      "Infinite Loops",
-      "Number Patterns",
+      { id: "why-we-use-loops", title: "Why We Use Loops" },
+      { id: "for-loops", title: "For Loops" },
+      { id: "while-loops", title: "While Loops" },
+      { id: "loop-counters", title: "Loop Counters" },
+      { id: "nested-loops", title: "Nested Loops" },
+      { id: "infinite-loops", title: "Infinite Loops" },
+      { id: "number-patterns", title: "Number Patterns" },
     ],
   },
   {
     title: "Functions",
     lessons: [
-      "Why Functions Matter",
-      "Defining Functions",
-      "Parameters and Arguments",
-      "Return Values",
-      "Variable Scope",
-      "Combining Functions",
-      "Build a Mini Program",
+      { id: "why-functions-matter", title: "Why Functions Matter" },
+      { id: "defining-functions", title: "Defining Functions" },
+      { id: "parameters-and-arguments", title: "Parameters and Arguments" },
+      { id: "return-values", title: "Return Values" },
+      { id: "variable-scope", title: "Variable Scope" },
+      { id: "combining-functions", title: "Combining Functions" },
+      { id: "build-a-mini-program", title: "Build a Mini Program" },
     ],
   },
   {
     title: "Putting It Together",
     lessons: [
-      "Reading a Full Program",
-      "Tracing Code",
-      "Planning with Pseudocode",
-      "Debugging",
-      "Final Project",
-      "World Mastery Quiz",
+      { id: "reading-a-full-program", title: "Reading a Full Program" },
+      { id: "tracing-code", title: "Tracing Code" },
+      { id: "planning-with-pseudocode", title: "Planning with Pseudocode" },
+      { id: "debugging", title: "Debugging" },
+      { id: "final-project", title: "Final Project" },
+      { id: "world-mastery-quiz", title: "World Mastery Quiz" },
     ],
   },
 ];
+
+const totalLessons = chapters.reduce(
+  (total, chapter) => total + chapter.lessons.length,
+  0
+);
 
 export default function LearnScreen() {
   const router = useRouter();
@@ -102,16 +110,20 @@ export default function LearnScreen() {
       contentContainerStyle={styles.content}
     >
       <Text style={styles.worldLabel}>WORLD 01</Text>
+
       <Text style={styles.title}>🌱 Coding Foundations</Text>
+
       <Text style={styles.subtitle}>
         Build the skills to think like a programmer.
       </Text>
 
       <View style={styles.progressCard}>
         <Text style={styles.progressTitle}>Your Progress</Text>
+
         <Text style={styles.progressText}>
-          0 of 43 lessons completed
+          0 of {totalLessons} lessons completed
         </Text>
+
         <View style={styles.progressTrack}>
           <View style={styles.progressFill} />
         </View>
@@ -142,6 +154,7 @@ export default function LearnScreen() {
                 <Text style={styles.chapterTitle}>
                   {chapter.title}
                 </Text>
+
                 <Text style={styles.chapterSubtitle}>
                   {chapter.lessons.length} lessons
                 </Text>
@@ -154,41 +167,64 @@ export default function LearnScreen() {
 
             {isExpanded && (
               <View style={styles.lessonList}>
-                {chapter.lessons.map((lesson, lessonIndex) => (
-                  <TouchableOpacity
-                    key={lessonIndex}
-                    style={styles.lessonRow}
-                    onPress={() => {
-  if (chapterIndex === 0) {
-    const lessonIds = [
-      "what-is-programming",
-      "algorithms-in-everyday-life",
-    ];
+                {chapter.lessons.map((lesson, lessonIndex) => {
+                  const isAvailable = !!getLesson(lesson.id);
 
-    const lessonId = lessonIds[lessonIndex];
+                  return (
+                    <TouchableOpacity
+                      key={lesson.id}
+                      style={[
+                        styles.lessonRow,
+                        !isAvailable && styles.lockedLessonRow,
+                      ]}
+                      disabled={!isAvailable}
+                      accessibilityRole="button"
+                      accessibilityState={{
+                        disabled: !isAvailable,
+                      }}
+                      onPress={() => {
+                        router.push({
+                          pathname: "/lesson",
+                          params: { id: lesson.id },
+                        });
+                      }}
+                    >
+                      <View
+                        style={[
+                          styles.lessonCircle,
+                          !isAvailable && styles.lockedCircle,
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.lessonNumber,
+                            !isAvailable && styles.lockedNumber,
+                          ]}
+                        >
+                          {lessonIndex + 1}
+                        </Text>
+                      </View>
 
-    if (lessonId) {
-      router.push({
-        pathname: "/lesson",
-        params: { id: lessonId },
-      });
-    }
-  }
-}}
-                  >
-                    <View style={styles.lessonCircle}>
-                      <Text style={styles.lessonNumber}>
-                        {lessonIndex + 1}
+                      <Text
+                        style={[
+                          styles.lessonTitle,
+                          !isAvailable && styles.lockedTitle,
+                        ]}
+                      >
+                        {lesson.title}
                       </Text>
-                    </View>
 
-                    <Text style={styles.lessonTitle}>
-                      {lesson}
-                    </Text>
-
-                    <Text style={styles.lessonArrow}>›</Text>
-                  </TouchableOpacity>
-                ))}
+                      <Text
+                        style={[
+                          styles.lessonArrow,
+                          !isAvailable && styles.lockedArrow,
+                        ]}
+                      >
+                        {isAvailable ? "›" : "🔒"}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             )}
           </View>
@@ -336,5 +372,23 @@ const styles = StyleSheet.create({
   lessonArrow: {
     fontSize: 24,
     color: "#B49AD9",
+  },
+
+  // Unfinished lesson styling
+  lockedLessonRow: {
+    opacity: 0.65,
+  },
+  lockedCircle: {
+    backgroundColor: "#F1EEF4",
+  },
+  lockedNumber: {
+    color: "#A8A0AF",
+  },
+  lockedTitle: {
+    color: "#A8A0AF",
+  },
+  lockedArrow: {
+    fontSize: 15,
+    color: "#A8A0AF",
   },
 });
