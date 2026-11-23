@@ -11,7 +11,9 @@ import { whatIsAVariable } from "./worlds/01-coding-foundations/02-variables-and
 import { creatingVariables } from "./worlds/01-coding-foundations/02-variables-and-data-types/02-creating-variables/lesson";
 import { numbersAndText } from "./worlds/01-coding-foundations/02-variables-and-data-types/03-numbers-and-text/lesson";
 import { changingVariableValues } from "./worlds/01-coding-foundations/02-variables-and-data-types/04-changing-variable-values/lesson";
-
+import { workingWithUserInput } from "./worlds/01-coding-foundations/02-variables-and-data-types/05-working-with-user-input/lesson";
+import { usingVariablesInCalculations } from "./worlds/01-coding-foundations/02-variables-and-data-types/06-using-variables-in-calculations/lesson";
+import { variablesChallenge } from "./worlds/01-coding-foundations/02-variables-and-data-types/07-variables-challenge/lesson";
 
 
 export const lessonRegistry: Record<string, Lesson> = {
@@ -25,6 +27,9 @@ export const lessonRegistry: Record<string, Lesson> = {
   "creating-variables": creatingVariables,
   "numbers-and-text": numbersAndText,
   "changing-variable-values": changingVariableValues,
+  "working-with-user-input": workingWithUserInput,
+  "using-variables-in-calculations": usingVariablesInCalculations,
+  "variables-challenge": variablesChallenge,
 };
 
 
