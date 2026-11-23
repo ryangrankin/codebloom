@@ -70,7 +70,35 @@ export const trueAndFalseExpressions: Lesson = {
         ]
       },
       "explanation": "You solved the challenge!"
-    }
+    },
+
+{
+  type: "code-builder",
+  title: "Build a Roller Coaster Checker! 🎢",
+  question:
+    "A roller coaster requires riders to be at least 12 years old. A visitor is 14. Arrange the code blocks to check whether the visitor is old enough and display the result.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY canRide",
+      "SET canRide = age >= 12",
+      "SET age = 14",
+    ],
+    c: [
+      'printf("%d", canRide);',
+      "bool canRide = age >= 12;",
+      "int age = 14;",
+    ],
+    cpp: [
+      "cout << canRide;",
+      "bool canRide = age >= 12;",
+      "int age = 14;",
+    ],
+  },
+  correctBlockOrder: [2, 1, 0],
+  explanation:
+    "The visitor is 14, and the minimum age is 12. Since 14 >= 12 evaluates to true, canRide is true! In C and C++, true is displayed as 1 by default.",
+},
+
   ],
   "codeExamples": {
     "pseudo": "SET isAdult = age >= 18",

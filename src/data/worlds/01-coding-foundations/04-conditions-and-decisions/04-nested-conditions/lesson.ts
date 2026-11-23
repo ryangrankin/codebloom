@@ -47,6 +47,46 @@ export const nestedConditions: Lesson = {
       },
       "explanation": "Great work! Your condition is correct."
     },
+
+{
+  type: "code-builder",
+  title: "Build a VIP Entry Checker! 🎟️",
+  question:
+    "A VIP event requires guests to be at least 18 years old and have a VIP pass. A guest is 21 and has a pass. Arrange the blocks using nested if statements to display a welcome message only when both conditions are true.",
+  codeBlocks: {
+    pseudo: [
+      "END IF",
+      'DISPLAY "Welcome to VIP!"',
+      "IF hasVIPPass THEN",
+      "IF age >= 18 THEN",
+      "SET hasVIPPass = TRUE",
+      "SET age = 21",
+      "END IF",
+    ],
+    c: [
+      "}",
+      'printf("Welcome to VIP!");',
+      "if (hasVIPPass) {",
+      "if (age >= 18) {",
+      "int hasVIPPass = 1;",
+      "int age = 21;",
+      "}",
+    ],
+    cpp: [
+      "}",
+      'cout << "Welcome to VIP!";',
+      "if (hasVIPPass) {",
+      "if (age >= 18) {",
+      "bool hasVIPPass = true;",
+      "int age = 21;",
+      "}",
+    ],
+  },
+  correctBlockOrder: [5, 4, 3, 2, 1, 0, 6],
+  explanation:
+    "First, the program checks whether the guest is at least 18. Since 21 >= 18 is true, it checks for a VIP pass. Both conditions are true, so the welcome message appears!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

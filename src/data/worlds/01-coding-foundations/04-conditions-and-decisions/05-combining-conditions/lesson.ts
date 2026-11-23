@@ -47,6 +47,43 @@ export const combiningConditions: Lesson = {
       },
       "explanation": "Great work! Your condition is correct."
     },
+
+{
+  type: "code-builder",
+  title: "Build a Student Discount Checker! 🎓",
+  question:
+    "A store offers a discount to customers who are students AND either under 18 or have a student ID. A customer is 20, is a student, and has a student ID. Arrange the blocks to check whether they qualify and display a message.",
+  codeBlocks: {
+    pseudo: [
+      "END IF",
+      'DISPLAY "Discount approved!"',
+      "IF isStudent AND (age < 18 OR hasStudentID) THEN",
+      "SET hasStudentID = TRUE",
+      "SET isStudent = TRUE",
+      "SET age = 20",
+    ],
+    c: [
+      "}",
+      'printf("Discount approved!");',
+      "if (isStudent && (age < 18 || hasStudentID)) {",
+      "int hasStudentID = 1;",
+      "int isStudent = 1;",
+      "int age = 20;",
+    ],
+    cpp: [
+      "}",
+      'cout << "Discount approved!";',
+      "if (isStudent && (age < 18 || hasStudentID)) {",
+      "bool hasStudentID = true;",
+      "bool isStudent = true;",
+      "int age = 20;",
+    ],
+  },
+  correctBlockOrder: [5, 4, 3, 2, 1, 0],
+  explanation:
+    "The customer is a student and has a student ID. Although they are not under 18, the OR condition is true because they have an ID. Both parts of the AND condition are satisfied, so the discount is approved!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

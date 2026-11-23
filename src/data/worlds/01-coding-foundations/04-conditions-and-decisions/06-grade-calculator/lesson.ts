@@ -47,6 +47,46 @@ export const gradeCalculator: Lesson = {
       },
       "explanation": "Great work! Your condition is correct."
     },
+
+{
+  type: "code-builder",
+  title: "Build a Report Card Calculator! 📚",
+  question:
+    "A student scored 85 on an exam. Build a program that assigns grade A for scores of 90 or higher, B for 80 or higher, C for 70 or higher, and F otherwise. Arrange the blocks to calculate and display the letter grade.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY grade",
+      "END IF",
+      'ELSE\nSET grade = "F"',
+      'ELSE IF score >= 70 THEN\nSET grade = "C"',
+      'ELSE IF score >= 80 THEN\nSET grade = "B"',
+      'IF score >= 90 THEN\nSET grade = "A"',
+      "SET score = 85",
+    ],
+    c: [
+      'printf("%c", grade);',
+      "}",
+      "} else {\n  grade = 'F';",
+      "} else if (score >= 70) {\n  grade = 'C';",
+      "} else if (score >= 80) {\n  grade = 'B';",
+      "if (score >= 90) {\n  grade = 'A';",
+      "int score = 85;\nchar grade = 'F';",
+    ],
+    cpp: [
+      "cout << grade;",
+      "}",
+      "} else {\n  grade = 'F';",
+      "} else if (score >= 70) {\n  grade = 'C';",
+      "} else if (score >= 80) {\n  grade = 'B';",
+      "if (score >= 90) {\n  grade = 'A';",
+      "int score = 85;\nchar grade = 'F';",
+    ],
+  },
+  correctBlockOrder: [6, 5, 4, 3, 2, 1, 0],
+  explanation:
+    "The score is 85. It doesn't meet the A requirement of 90, but it does meet the B requirement of 80. The program assigns grade B and skips the remaining branches. Checking the highest scores first ensures the correct grade!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

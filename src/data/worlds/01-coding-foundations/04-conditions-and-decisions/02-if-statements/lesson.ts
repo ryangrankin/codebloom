@@ -48,6 +48,37 @@ export const ifStatements: Lesson = {
       },
       "explanation": "Great work! Your condition is correct."
     },
+
+{
+  type: "code-builder",
+  title: "Build a Weather Warning! 🌡️",
+  question:
+    "A weather station measures a temperature of 105 degrees. Arrange the code blocks to display a warning only when the temperature is above 100.",
+  codeBlocks: {
+    pseudo: [
+      "END IF",
+      'DISPLAY "Heat warning!"',
+      "IF temperature > 100 THEN",
+      "SET temperature = 105",
+    ],
+    c: [
+      "}",
+      'printf("Heat warning!");',
+      "if (temperature > 100) {",
+      "int temperature = 105;",
+    ],
+    cpp: [
+      "}",
+      'cout << "Heat warning!";',
+      "if (temperature > 100) {",
+      "int temperature = 105;",
+    ],
+  },
+  correctBlockOrder: [3, 2, 1, 0],
+  explanation:
+    "The temperature is 105, which is greater than 100. The condition evaluates to true, so the program displays 'Heat warning!'. If the temperature were 100 or lower, the message would not appear.",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

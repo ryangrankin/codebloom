@@ -47,6 +47,43 @@ export const elseAndElseIf: Lesson = {
       },
       "explanation": "Great work! Your condition is correct."
     },
+
+{
+  type: "code-builder",
+  title: "Build a Movie Ticket Price Checker! 🎬",
+  question:
+    "A movie theater charges $8 for children under 13, $12 for teens under 18, and $15 for adults. A customer is 16. Arrange the blocks to calculate and display the correct ticket price.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY price",
+      "END IF",
+      "ELSE\nSET price = 15",
+      "ELSE IF age < 18 THEN\nSET price = 12",
+      "IF age < 13 THEN\nSET price = 8",
+      "SET age = 16",
+    ],
+    c: [
+      'printf("%d", price);',
+      "}",
+      "} else {\n  price = 15;",
+      "} else if (age < 18) {\n  price = 12;",
+      "if (age < 13) {\n  price = 8;",
+      "int age = 16;\nint price = 0;",
+    ],
+    cpp: [
+      "cout << price;",
+      "}",
+      "} else {\n  price = 15;",
+      "} else if (age < 18) {\n  price = 12;",
+      "if (age < 13) {\n  price = 8;",
+      "int age = 16;\nint price = 0;",
+    ],
+  },
+  correctBlockOrder: [5, 4, 3, 2, 1, 0],
+  explanation:
+    "The customer is 16, so the first condition (age < 13) is false. The next condition (age < 18) is true, so the ticket costs $12. The else branch is skipped.",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",
