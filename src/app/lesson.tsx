@@ -87,9 +87,27 @@ export default function LessonScreen() {
     []
   );
   const [checked, setChecked] = useState(false);
-  const [codeAnswer, setCodeAnswer] = useState("");
-  const [language, setLanguage] =
-    useState<CodeLanguage>("pseudo");
+
+const [language, setLanguage] =
+  useState<CodeLanguage>("pseudo");
+
+const [codeDrafts, setCodeDrafts] = useState<
+  Record<CodeLanguage, string>
+>({
+  pseudo: "",
+  c: "",
+  cpp: "",
+});
+
+const codeAnswer = codeDrafts[language];
+
+function setCodeAnswer(value: string) {
+  setCodeDrafts((previous) => ({
+    ...previous,
+    [language]: value,
+  }));
+}
+
   const [wasCompletedBefore, setWasCompletedBefore] =
     useState(false);
 
@@ -178,14 +196,20 @@ const codeIsCorrect =
         ? codeAnswer.trim().length > 0
         : false;
 
-  function resetAnswer() {
-    setSelectedAnswer(null);
-    setSelectedOrder([]);
-    setCodeAnswer("");
-    setChecked(false);
-    setAttempts(0);
-    setShowHint(false);
-  }
+function resetAnswer() {
+  setSelectedAnswer(null);
+  setSelectedOrder([]);
+
+  setCodeDrafts({
+    pseudo: "",
+    c: "",
+    cpp: "",
+  });
+
+  setChecked(false);
+  setAttempts(0);
+  setShowHint(false);
+}
 
   function nextStep() {
     setStepIndex((previous) => previous + 1);
@@ -220,19 +244,18 @@ const codeIsCorrect =
     }
   }
 
-  function changeLanguage(nextLanguage: CodeLanguage) {
-    if (nextLanguage === language) return;
+function changeLanguage(nextLanguage: CodeLanguage) {
+  if (nextLanguage === language) return;
 
-    setLanguage(nextLanguage);
+  setLanguage(nextLanguage);
 
-    if (isOrdering || isCodeInput) {
-      setSelectedOrder([]);
-      setCodeAnswer("");
-      setChecked(false);
-      setAttempts(0);
-      setShowHint(false);
-    }
+  if (isOrdering || isCodeInput) {
+    setSelectedOrder([]);
+    setChecked(false);
+    setAttempts(0);
+    setShowHint(false);
   }
+}
 
   function renderFeedback(
     correctMessage: string,
@@ -559,7 +582,7 @@ const codeIsCorrect =
             <TextInput
               style={styles.codeInput}
               value={codeAnswer}
-              onChangeText={setCodeAnswer}
+              onChangeText={(text) => setCodeAnswer(text)}
               placeholder={
                 step.placeholder ??
                 "Write your code here..."
