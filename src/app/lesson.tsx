@@ -9,10 +9,21 @@ import {
     View,
 } from "react-native";
 
-const lessonSteps = [
+type LessonStep = {
+  type: "explanation" | "quiz" | "ordering";
+  title: string;
+  description?: string;
+  question?: string;
+  options?: string[];
+  correctAnswer?: number;
+  correctOrder?: number[];
+  explanation?: string;
+};
+
+const lessonSteps: LessonStep[] = [
   {
     type: "explanation",
-    title: "Welcome to Coding! 💻",
+    title: "Welcome to Coding!",
     description:
       "Programming is the process of giving a computer instructions to complete a task.\n\n" +
       "These instructions are written using programming languages such as C and C++.\n\n" +
@@ -55,6 +66,19 @@ const lessonSteps = [
     explanation:
       "C++ is a programming language used to write instructions for computers.",
   },
+  {
+  type: "ordering",
+  title: "Think Like a Programmer ",
+  question: "Put these instructions in the correct order.",
+  options: [
+    "Display the result",
+    "Ask the user for a number",
+    "Multiply the number by 2",
+  ],
+  correctOrder: [1, 2, 0],
+  explanation:
+    "First, get the input. Next, process it. Finally, display the output.",
+},
 ];
 
 export default function LessonScreen() {
@@ -65,6 +89,7 @@ export default function LessonScreen() {
     null
   );
   const [checked, setChecked] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<number[]>([]);
 
   const isComplete = stepIndex >= lessonSteps.length;
   const step = lessonSteps[stepIndex];
@@ -77,6 +102,7 @@ export default function LessonScreen() {
     setStepIndex((previous) => previous + 1);
     setSelectedAnswer(null);
     setChecked(false);
+    setSelectedOrder([]);
   }
 
   if (isComplete) {
@@ -132,6 +158,70 @@ export default function LessonScreen() {
         </View>
       )}
 
+      {step.type === "ordering" && (
+  <View>
+    <Text style={styles.question}>{step.question}</Text>
+
+    <Text style={styles.orderLabel}>Your sequence:</Text>
+
+    <View style={styles.orderContainer}>
+      {selectedOrder.length === 0 ? (
+        <Text style={styles.placeholder}>
+          Tap the instructions below in the correct order.
+        </Text>
+      ) : (
+        selectedOrder.map((index, position) => (
+          <TouchableOpacity
+            key={index}
+            disabled={checked}
+            style={styles.orderItem}
+            onPress={() =>
+              setSelectedOrder((previous) =>
+                previous.filter((value) => value !== index)
+              )
+            }
+          >
+            <Text style={styles.optionText}>
+              {position + 1}. {step.options?.[index]} ✕
+            </Text>
+          </TouchableOpacity>
+        ))
+      )}
+    </View>
+
+    <Text style={styles.orderLabel}>Available instructions:</Text>
+
+     {step.options?.map((option, index) =>
+       selectedOrder.includes(index) ? null : (
+          <TouchableOpacity
+             key={index}
+             disabled={checked}
+            style={styles.option}
+            onPress={() =>
+             setSelectedOrder((previous) => [...previous, index])
+             }
+           >
+             <Text style={styles.optionText}>{option}</Text>
+            </TouchableOpacity>
+          )
+        )}
+
+     {checked && (
+         <View style={styles.feedback}>
+          <Text style={styles.feedbackTitle}>
+           {JSON.stringify(selectedOrder) ===
+           JSON.stringify(step.correctOrder)
+             ? "Correct! 🎉"
+             : "Not quite! 💡"}
+         </Text>
+         <Text style={styles.feedbackText}>
+            {step.explanation}
+          </Text>
+          </View>
+      )}
+     </View>
+    )}
+
       {isQuiz && (
         <View>
           <Text style={styles.question}>{step.question}</Text>
@@ -176,25 +266,31 @@ export default function LessonScreen() {
       )}
 
       {step.type === "explanation" ? (
-        <TouchableOpacity style={styles.button} onPress={nextStep}>
-          <Text style={styles.buttonText}>Continue →</Text>
-        </TouchableOpacity>
-      ) : !checked ? (
-        <TouchableOpacity
-          style={[
-            styles.button,
-            selectedAnswer === null && styles.disabledButton,
-          ]}
-          disabled={selectedAnswer === null}
-          onPress={() => setChecked(true)}
-        >
-          <Text style={styles.buttonText}>Check Answer</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity style={styles.button} onPress={nextStep}>
-          <Text style={styles.buttonText}>Continue →</Text>
-        </TouchableOpacity>
-      )}
+  <TouchableOpacity style={styles.button} onPress={nextStep}>
+    <Text style={styles.buttonText}>Continue →</Text>
+  </TouchableOpacity>
+) : !checked ? (
+  <TouchableOpacity
+    style={[
+      styles.button,
+      (step.type === "ordering"
+        ? selectedOrder.length !== step.options?.length
+        : selectedAnswer === null) && styles.disabledButton,
+    ]}
+    disabled={
+      step.type === "ordering"
+        ? selectedOrder.length !== step.options?.length
+        : selectedAnswer === null
+    }
+    onPress={() => setChecked(true)}
+  >
+    <Text style={styles.buttonText}>Check Answer</Text>
+  </TouchableOpacity>
+) : (
+  <TouchableOpacity style={styles.button} onPress={nextStep}>
+    <Text style={styles.buttonText}>Continue →</Text>
+  </TouchableOpacity>
+)}
     </ScrollView>
   );
 }
@@ -348,4 +444,29 @@ const styles = StyleSheet.create({
     color: "#9162E4",
     marginTop: 30,
   },
+  orderLabel: {
+  fontSize: 14,
+  fontWeight: "700",
+  color: "#685779",
+  marginBottom: 12,
+  marginTop: 15,
+},
+orderContainer: {
+  backgroundColor: "#F3EAFF",
+  borderRadius: 16,
+  padding: 15,
+  minHeight: 85,
+  marginBottom: 18,
+},
+orderItem: {
+  backgroundColor: "#FFFFFF",
+  borderRadius: 12,
+  padding: 14,
+  marginBottom: 8,
+},
+placeholder: {
+  fontSize: 14,
+  color: "#847A91",
+  lineHeight: 22,
+},
 });
