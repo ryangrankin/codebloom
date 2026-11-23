@@ -1,6 +1,6 @@
 
-import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
 import {
     ScrollView,
     StyleSheet,
@@ -8,6 +8,10 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
+import {
+    calculateXP,
+    getCompletedLessons,
+} from "../data/progressStorage";
 
 import { getLesson } from "../data/lessonRegistry";
 
@@ -104,6 +108,28 @@ export default function LearnScreen() {
   const [expandedChapter, setExpandedChapter] =
     useState<number | null>(0);
 
+const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+
+useFocusEffect(
+  useCallback(() => {
+    let active = true;
+
+    getCompletedLessons().then((completed) => {
+      if (active) {
+        setCompletedLessons(completed);
+      }
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [])
+);
+
+const completedCount = completedLessons.length;
+const totalXP = calculateXP(completedLessons);
+const progressPercent = (completedCount / totalLessons) * 100;
+
   return (
     <ScrollView
       style={styles.container}
@@ -121,11 +147,20 @@ export default function LearnScreen() {
         <Text style={styles.progressTitle}>Your Progress</Text>
 
         <Text style={styles.progressText}>
-          0 of {totalLessons} lessons completed
+            {completedCount} of {totalLessons} lessons completed
+        </Text>
+
+        <Text style={styles.progressText}>
+             ⭐ {totalXP} XP earned
         </Text>
 
         <View style={styles.progressTrack}>
-          <View style={styles.progressFill} />
+          <View
+  style={[
+    styles.progressFill,
+    { width: `${progressPercent}%` as `${number}%` },
+  ]}
+/>
         </View>
       </View>
 
@@ -196,12 +231,13 @@ export default function LearnScreen() {
                         ]}
                       >
                         <Text
-                          style={[
-                            styles.lessonNumber,
-                            !isAvailable && styles.lockedNumber,
-                          ]}
+                            style={[
+                                 styles.lessonNumber,
+                                 !isAvailable && styles.lockedNumber,
+                                    completedLessons.includes(lesson.id) && styles.completedNumber,
+                            ]}
                         >
-                          {lessonIndex + 1}
+                         {completedLessons.includes(lesson.id) ? "✓" : lessonIndex + 1}
                         </Text>
                       </View>
 
@@ -391,4 +427,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#A8A0AF",
   },
+  completedNumber: {
+  color: "#3B9B75",
+  fontWeight: "800",
+  fontSize: 17,
+},
 });

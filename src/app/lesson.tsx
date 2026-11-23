@@ -1,6 +1,6 @@
 
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     ScrollView,
     StyleSheet,
@@ -10,6 +10,7 @@ import {
 } from "react-native";
 
 import { getLesson } from "../data/lessonRegistry";
+import { completeLesson } from "../data/progressStorage";
 import type { CodeLanguage } from "../data/types";
 
 export default function LessonScreen() {
@@ -28,6 +29,17 @@ export default function LessonScreen() {
   const [language, setLanguage] = useState<CodeLanguage>("pseudo");
 
   const isComplete = stepIndex >= (lesson?.steps.length ?? 0);
+  useEffect(() => {
+  if (!isComplete || !lesson) return;
+
+  completeLesson(lesson.id)
+    .then(() => {
+      console.log("Lesson progress saved:", lesson.id);
+    })
+    .catch((error) => {
+      console.error("Failed to save lesson progress:", error);
+    });
+}, [isComplete, lesson?.id]);
   const step = lesson?.steps[stepIndex];
 
   const progress = lesson
