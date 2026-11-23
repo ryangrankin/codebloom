@@ -6,6 +6,8 @@ import { algorithmsInEverydayLife } from "./worlds/01-coding-foundations/01-thin
 import { writingYourFirstPseudocode } from "./worlds/01-coding-foundations/01-thinking-like-a-programmer/03-writing-your-first-pseudocode/lesson";
 import { sequencingInstructions } from "./worlds/01-coding-foundations/01-thinking-like-a-programmer/04-sequencing-instructions/lesson";
 import { findingLogicalErrors } from "./worlds/01-coding-foundations/01-thinking-like-a-programmer/05-finding-logical-errors/lesson";
+import { planAnAlgorithm } from "./worlds/01-coding-foundations/01-thinking-like-a-programmer/06-plan-an-algorithm/lesson";
+
 
 export const lessonRegistry: Record<string, Lesson> = {
   "what-is-programming": whatIsProgramming,
@@ -13,7 +15,9 @@ export const lessonRegistry: Record<string, Lesson> = {
   "writing-your-first-pseudocode": writingYourFirstPseudocode,
   "sequencing-instructions": sequencingInstructions,
   "finding-logical-errors": findingLogicalErrors,
+  "plan-an-algorithm": planAnAlgorithm,
 };
+
 
 export function getLesson(id: string): Lesson | undefined {
   return lessonRegistry[id];
