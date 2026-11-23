@@ -1,98 +1,217 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function HomeScreen() {
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <Text style={styles.logo}>✿ CodeBloom</Text>
+        <Text style={styles.greeting}>Ready to grow your skills?</Text>
+        <Text style={styles.subtitle}>
+          A little coding every day adds up!
+        </Text>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+        <View style={styles.statsRow}>
+          <View style={styles.statCard}>
+            <Text style={styles.statEmoji}>⚡</Text>
+            <Text style={styles.statNumber}>0 XP</Text>
+            <Text style={styles.statLabel}>Total XP</Text>
+          </View>
+          <View style={styles.statCard}>
+            <Text style={styles.statEmoji}>🔥</Text>
+            <Text style={styles.statNumber}>0 days</Text>
+            <Text style={styles.statLabel}>Streak</Text>
+          </View>
+        </View>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+        <Text style={styles.sectionTitle}>Continue Learning</Text>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+        <View style={styles.lessonCard}>
+          <Text style={styles.chapterLabel}>
+            WORLD 01 · CHAPTER 01
+          </Text>
+          <Text style={styles.lessonTitle}>
+            Thinking Like a Programmer
+          </Text>
+          <Text style={styles.lessonDescription}>
+            Learn how programmers approach problems and
+            build solutions step by step.
+          </Text>
+
+          <View style={styles.progressTrack}>
+            <View style={styles.progressFill} />
+          </View>
+
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Start Learning →</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.sectionTitle}>Your Learning Path</Text>
+
+        <View style={styles.worldCard}>
+          <Text style={styles.worldEmoji}>🌱</Text>
+          <View style={styles.worldInfo}>
+            <Text style={styles.worldTitle}>
+              01. Coding Foundations
+            </Text>
+            <Text style={styles.worldDescription}>
+              Pseudocode, variables, loops, and functions
+            </Text>
+          </View>
+        </View>
+
+        <Text style={styles.footer}>
+          Every great programmer starts somewhere. ♡
+        </Text>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+    backgroundColor: "#FFF9FD",
   },
-  safeArea: {
+  content: {
+    padding: 24,
+    paddingBottom: 50,
+  },
+  logo: {
+    fontSize: 26,
+    fontWeight: "800",
+    color: "#8B5CF6",
+    marginBottom: 28,
+  },
+  greeting: {
+    fontSize: 27,
+    fontWeight: "800",
+    color: "#2D2440",
+  },
+  subtitle: {
+    fontSize: 15,
+    color: "#847A91",
+    marginTop: 8,
+    marginBottom: 28,
+  },
+  statsRow: {
+    flexDirection: "row",
+    gap: 12,
+    marginBottom: 30,
+  },
+  statCard: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+    backgroundColor: "#F0E8FF",
+    borderRadius: 18,
+    padding: 18,
+    alignItems: "center",
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
+  statEmoji: {
+    fontSize: 25,
+  },
+  statNumber: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: "#563B86",
+    marginTop: 8,
+  },
+  statLabel: {
+    fontSize: 12,
+    color: "#817095",
+    marginTop: 4,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: "#332748",
+    marginBottom: 14,
+  },
+  lessonCard: {
+    backgroundColor: "#EDE1FF",
+    padding: 22,
+    borderRadius: 22,
+    marginBottom: 30,
+  },
+  chapterLabel: {
+    fontSize: 11,
+    fontWeight: "800",
+    color: "#8B5CF6",
+    letterSpacing: 1,
+  },
+  lessonTitle: {
+    fontSize: 22,
+    fontWeight: "800",
+    color: "#392653",
+    marginTop: 10,
+  },
+  lessonDescription: {
+    fontSize: 14,
+    color: "#685779",
+    marginTop: 10,
+    lineHeight: 21,
+  },
+  progressTrack: {
+    height: 9,
+    backgroundColor: "#D9C7F5",
+    borderRadius: 10,
+    marginTop: 20,
+    overflow: "hidden",
+  },
+  progressFill: {
+    width: "0%",
+    height: "100%",
+    backgroundColor: "#9B70E8",
+  },
+  button: {
+    backgroundColor: "#9162E4",
+    padding: 16,
+    borderRadius: 14,
+    alignItems: "center",
+    marginTop: 20,
+  },
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "800",
+  },
+  worldCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    padding: 18,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: "#F0E8F5",
+  },
+  worldEmoji: {
+    fontSize: 32,
+    marginRight: 14,
+  },
+  worldInfo: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
   },
-  title: {
-    textAlign: 'center',
+  worldTitle: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: "#392653",
   },
-  code: {
-    textTransform: 'uppercase',
+  worldDescription: {
+    fontSize: 12,
+    color: "#847A91",
+    marginTop: 5,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  footer: {
+    textAlign: "center",
+    color: "#A294AF",
+    fontSize: 12,
+    marginTop: 35,
   },
 });
