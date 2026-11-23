@@ -76,11 +76,49 @@ export const planAnAlgorithm: Lesson = {
         "Planning helps you organize the inputs, steps, and expected output",
         "Planning makes every program run instantly",
       ],
-      correctAnswer: 2,
-      explanation:
-        "Planning helps you understand the problem and organize a solution before dealing with programming-language syntax.",
+          correctAnswer: 2,
+    explanation:
+      "Planning helps you understand the problem and organize a solution before dealing with programming-language syntax.",
+  },
+  {
+    type: "code-input",
+    title: "Write Your First Code!",
+    question:
+      "Write one instruction that displays the message Hello, CodeBloom!",
+    codePrompt: {
+      pseudo: 'Write a DISPLAY instruction:',
+      c: `#include <stdio.h>
+
+int main(void) {
+    // Write your instruction here
+    return 0;
+}`,
+      cpp: `#include <iostream>
+using namespace std;
+
+int main() {
+    // Write your instruction here
+    return 0;
+}`,
     },
-  ],
+    acceptedAnswers: {
+      pseudo: [
+        'DISPLAY "Hello, CodeBloom!"',
+      ],
+      c: [
+        'printf("Hello, CodeBloom!");',
+        'puts("Hello, CodeBloom!");',
+      ],
+      cpp: [
+        'cout << "Hello, CodeBloom!";',
+        'std::cout << "Hello, CodeBloom!";',
+      ],
+    },
+    placeholder: "Type your code here...",
+    explanation:
+      "You just wrote a real output instruction! Different languages use different syntax, but the goal is the same: display a message.",
+  },
+],
 
   codeExamples: {
     pseudo: `INPUT price1

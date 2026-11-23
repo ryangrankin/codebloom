@@ -1,7 +1,7 @@
 export type CodeLanguage = "pseudo" | "c" | "cpp";
 
 export type LessonStep = {
-  type: "explanation" | "quiz" | "ordering";
+  type: "explanation" | "quiz" | "ordering" | "code-input";
   title: string;
   description?: string;
   question?: string;
@@ -9,6 +9,9 @@ export type LessonStep = {
   correctAnswer?: number;
   correctOrder?: number[];
   explanation?: string;
+  codePrompt?: Record<CodeLanguage, string>;
+  acceptedAnswers?: Record<CodeLanguage, string[]>;
+  placeholder?: string; 
 };
 
 export type Lesson = {

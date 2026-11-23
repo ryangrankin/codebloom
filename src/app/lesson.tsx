@@ -5,6 +5,7 @@ import {
     ScrollView,
     StyleSheet,
     Text,
+    TextInput,
     TouchableOpacity,
     View,
 } from "react-native";
@@ -22,6 +23,21 @@ const languages: { label: string; value: CodeLanguage }[] = [
   { label: "C++", value: "cpp" },
 ];
 
+function normalizeCode(
+  code: string,
+  language: "pseudo" | "c" | "cpp"
+) {
+  const normalized = code
+    .trim()
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/\s+/g, " ");
+
+  return language === "pseudo"
+    ? normalized.toLowerCase()
+    : normalized;
+}
+
 export default function LessonScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id?: string }>();
@@ -37,6 +53,7 @@ export default function LessonScreen() {
   );
   const [selectedOrder, setSelectedOrder] = useState<number[]>([]);
   const [checked, setChecked] = useState(false);
+  const [codeAnswer, setCodeAnswer] = useState("");
   const [language, setLanguage] = useState<CodeLanguage>("pseudo");
   const [wasCompletedBefore, setWasCompletedBefore] = useState(false);
 
@@ -95,22 +112,45 @@ export default function LessonScreen() {
   const answerIsCorrect =
     isQuiz && selectedAnswer === step?.correctAnswer;
 
-  const isCorrect = isOrdering
-    ? orderingIsCorrect
-    : isQuiz
-    ? answerIsCorrect
-    : true;
+const isCodeInput = step?.type === "code-input";
 
-  const canCheck = isOrdering
-    ? currentOrderingOptions.length > 0 &&
-      selectedOrder.length === currentOrderingOptions.length
-    : selectedAnswer !== null;
+const acceptedCodeAnswers = isCodeInput
+  ? step.acceptedAnswers?.[language] ?? []
+  : [];
+
+const codeIsCorrect =
+  isCodeInput &&
+  acceptedCodeAnswers.some(
+    (answer) =>
+      normalizeCode(answer, language) ===
+      normalizeCode(codeAnswer, language)
+  );
+
+
+
+const isCorrect = isOrdering
+  ? orderingIsCorrect
+  : isQuiz
+  ? answerIsCorrect
+  : isCodeInput
+  ? codeIsCorrect
+  : true;
+
+const canCheck = isOrdering
+  ? currentOrderingOptions.length > 0 &&
+    selectedOrder.length === currentOrderingOptions.length
+  : isQuiz
+  ? selectedAnswer !== null
+  : isCodeInput
+  ? codeAnswer.trim().length > 0
+  : false;
 
   function resetAnswer() {
-    setSelectedAnswer(null);
-    setSelectedOrder([]);
-    setChecked(false);
-  }
+  setSelectedAnswer(null);
+  setSelectedOrder([]);
+  setCodeAnswer("");
+  setChecked(false);
+}
 
   function resetLesson() {
     setStepIndex(0);
@@ -131,14 +171,23 @@ export default function LessonScreen() {
     resetAnswer();
   }
 
-  function changeLanguage(nextLanguage: CodeLanguage) {
-    setLanguage(nextLanguage);
+function changeLanguage(nextLanguage: CodeLanguage) {
+  if (nextLanguage === language) return;
 
-    // Clear an ordering attempt when the language changes.
-    if (isOrdering && !checked) {
-      setSelectedOrder([]);
-    }
+  setLanguage(nextLanguage);
+
+  // Each language has its own syntax.
+  // Clear the current answer when switching languages.
+  if (isOrdering) {
+    setSelectedOrder([]);
+    setChecked(false);
   }
+
+  if (step?.type === "code-input") {
+    setCodeAnswer("");
+    setChecked(false);
+  }
+}
 
   if (!lesson) {
     return (
@@ -433,6 +482,66 @@ export default function LessonScreen() {
         </View>
       )}
 
+      {/* Code-writing exercise */}
+{step.type === "code-input" && (
+  <View>
+    <Text style={styles.question}>
+      {step.question}
+    </Text>
+
+    <View style={styles.codeContainer}>
+      <Text style={styles.codeLabel}>
+        {language === "pseudo"
+          ? "PSEUDOCODE"
+          : language === "c"
+          ? "C"
+          : "C++"}
+      </Text>
+
+      <Text style={styles.codeText}>
+        {step.codePrompt?.[language]}
+      </Text>
+    </View>
+
+    <Text style={styles.orderLabel}>
+      Write your code:
+    </Text>
+
+    <TextInput
+      style={styles.codeInput}
+      value={codeAnswer}
+      onChangeText={setCodeAnswer}
+      placeholder={step.placeholder ?? "Type your code here..."}
+      placeholderTextColor="#9A90A5"
+      multiline
+      autoCapitalize="none"
+      autoCorrect={false}
+      editable={!checked}
+    />
+    {checked && (
+  <View
+    style={[
+      styles.feedback,
+      isCorrect
+        ? styles.correctFeedback
+        : styles.incorrectFeedback,
+    ]}
+  >
+    <Text style={styles.feedbackTitle}>
+      {isCorrect ? "Correct! 🎉" : "Not quite! 💡"}
+    </Text>
+
+    <Text style={styles.feedbackText}>
+      {isCorrect
+        ? step.explanation ??
+          "Great job writing your own code!"
+        : "Your code doesn't match an accepted solution yet. Check the syntax and try again."}
+    </Text>
+  </View>
+)}
+  </View>
+)}
+
       {/* Navigation buttons */}
       {step.type === "explanation" ? (
         <TouchableOpacity
@@ -724,4 +833,17 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     lineHeight: 22,
   },
+
+  codeInput: {
+  backgroundColor: "#FFFFFF",
+  borderWidth: 2,
+  borderColor: "#9162E4",
+  borderRadius: 16,
+  padding: 18,
+  minHeight: 110,
+  fontFamily: "monospace",
+  fontSize: 15,
+  color: "#392653",
+  textAlignVertical: "top",
+},
 });
