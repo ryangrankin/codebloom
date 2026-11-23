@@ -10,12 +10,14 @@ import {
     View,
 } from "react-native";
 
+import { validateCode } from "../data/codeValidator";
 import { getLesson } from "../data/lessonRegistry";
 import {
     completeLesson,
     getCompletedLessons,
 } from "../data/progressStorage";
 import type { CodeLanguage } from "../data/types";
+
 
 const languages: { label: string; value: CodeLanguage }[] = [
   { label: "Pseudocode", value: "pseudo" },
@@ -152,13 +154,12 @@ export default function LessonScreen() {
     ? step.acceptedAnswers?.[language] ?? []
     : [];
 
-  const codeIsCorrect =
-    isCodeInput &&
-    acceptedCodeAnswers.some(
-      (answer) =>
-        normalizeCode(answer, language) ===
-        normalizeCode(codeAnswer, language)
-    );
+const codeValidation = isCodeInput
+  ? validateCode(codeAnswer, language, acceptedCodeAnswers)
+  : null;
+
+const codeIsCorrect =
+  isCodeInput && (codeValidation?.correct ?? false);
 
   const isCorrect = isOrdering
     ? orderingIsCorrect
@@ -576,10 +577,10 @@ export default function LessonScreen() {
           </View>
 
           <Text style={styles.editorHelp}>
-            Write your answer in the editor.
-            Spacing outside quoted text won't
-            affect checking.
-          </Text>
+                Write your answer in the editor.
+                Formatting and comments are ignored,
+                but programming syntax still matters.
+         </Text>
 
           {attempts > 0 && !checked && (
             <TouchableOpacity
@@ -611,7 +612,8 @@ export default function LessonScreen() {
 
           {renderFeedback(
             "Great job writing your own code!",
-            "Your code doesn't match an accepted solution yet. Check the syntax, then edit your code and try again."
+            codeValidation?.feedback ??
+            "Review your solution and try again."
           )}
         </View>
       )}
