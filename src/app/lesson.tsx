@@ -10,16 +10,27 @@ import {
 } from "react-native";
 
 import { getLesson } from "../data/lessonRegistry";
-import { completeLesson } from "../data/progressStorage";
+import {
+    completeLesson,
+    getCompletedLessons,
+} from "../data/progressStorage";
 import type { CodeLanguage } from "../data/types";
+
+const languages: { label: string; value: CodeLanguage }[] = [
+  { label: "Pseudocode", value: "pseudo" },
+  { label: "C", value: "c" },
+  { label: "C++", value: "cpp" },
+];
 
 export default function LessonScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id?: string }>();
 
-  const lessonId = typeof id === "string" ? id : "what-is-programming";
+  const lessonId =
+    typeof id === "string" ? id : "what-is-programming";
+
   const lesson = getLesson(lessonId);
-  
+
   const [stepIndex, setStepIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(
     null
@@ -27,45 +38,48 @@ export default function LessonScreen() {
   const [selectedOrder, setSelectedOrder] = useState<number[]>([]);
   const [checked, setChecked] = useState(false);
   const [language, setLanguage] = useState<CodeLanguage>("pseudo");
+  const [wasCompletedBefore, setWasCompletedBefore] = useState(false);
 
-  const isComplete = stepIndex >= (lesson?.steps.length ?? 0);
+  const isComplete =
+    !!lesson && stepIndex >= lesson.steps.length;
+
   useEffect(() => {
-  if (!isComplete || !lesson) return;
+    let active = true;
 
-  completeLesson(lesson.id)
-    .then(() => {
-      console.log("Lesson progress saved:", lesson.id);
-    })
-    .catch((error) => {
-      console.error("Failed to save lesson progress:", error);
-    });
-}, [isComplete, lesson?.id]);
+    getCompletedLessons()
+      .then((completed) => {
+        if (active) {
+          setWasCompletedBefore(completed.includes(lessonId));
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to load progress:", error);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [lessonId]);
+
+  useEffect(() => {
+    if (!isComplete || !lesson) return;
+
+    completeLesson(lesson.id)
+      .then(() => {
+        console.log("Lesson progress saved:", lesson.id);
+      })
+      .catch((error) => {
+        console.error("Failed to save lesson progress:", error);
+      });
+  }, [isComplete, lesson?.id]);
+
   const step = lesson?.steps[stepIndex];
 
   const progress = lesson
-  ? isComplete
-    ? 100
-    : (stepIndex / lesson.steps.length) * 100
-  : 0;
-
-  function resetLesson() {
-    setStepIndex(0);
-    setSelectedAnswer(null);
-    setSelectedOrder([]);
-    setChecked(false);
-  }
-
-  function nextStep() {
-    setStepIndex((previous) => previous + 1);
-    setSelectedAnswer(null);
-    setSelectedOrder([]);
-    setChecked(false);
-  }
-
-  function exitLesson() {
-    resetLesson();
-    router.replace("/learn");
-  }
+    ? isComplete
+      ? 100
+      : (stepIndex / lesson.steps.length) * 100
+    : 0;
 
   const isOrdering = step?.type === "ordering";
   const isQuiz = step?.type === "quiz";
@@ -74,25 +88,74 @@ export default function LessonScreen() {
     lesson?.orderingOptions?.[language] ?? step?.options ?? [];
 
   const orderingIsCorrect =
+    isOrdering &&
     JSON.stringify(selectedOrder) ===
-    JSON.stringify(step?.correctOrder);
+      JSON.stringify(step?.correctOrder);
 
   const answerIsCorrect =
-    selectedAnswer === step?.correctAnswer;
+    isQuiz && selectedAnswer === step?.correctAnswer;
 
-if (!lesson) {
-  return (
-    <View style={styles.completeContainer}>
-      <Text style={styles.completeTitle}>Lesson Not Found</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.replace("/learn")}
-      >
-        <Text style={styles.buttonText}>Back to Learning Path</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
+  const isCorrect = isOrdering
+    ? orderingIsCorrect
+    : isQuiz
+    ? answerIsCorrect
+    : true;
+
+  const canCheck = isOrdering
+    ? currentOrderingOptions.length > 0 &&
+      selectedOrder.length === currentOrderingOptions.length
+    : selectedAnswer !== null;
+
+  function resetAnswer() {
+    setSelectedAnswer(null);
+    setSelectedOrder([]);
+    setChecked(false);
+  }
+
+  function resetLesson() {
+    setStepIndex(0);
+    resetAnswer();
+  }
+
+  function nextStep() {
+    setStepIndex((previous) => previous + 1);
+    resetAnswer();
+  }
+
+  function exitLesson() {
+    resetLesson();
+    router.replace("/learn");
+  }
+
+  function retryAnswer() {
+    resetAnswer();
+  }
+
+  function changeLanguage(nextLanguage: CodeLanguage) {
+    setLanguage(nextLanguage);
+
+    // Clear an ordering attempt when the language changes.
+    if (isOrdering && !checked) {
+      setSelectedOrder([]);
+    }
+  }
+
+  if (!lesson) {
+    return (
+      <View style={styles.completeContainer}>
+        <Text style={styles.completeTitle}>Lesson Not Found</Text>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.replace("/learn")}
+        >
+          <Text style={styles.buttonText}>
+            Back to Learning Path
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   if (isComplete) {
     return (
@@ -108,7 +171,9 @@ if (!lesson) {
         </Text>
 
         <Text style={styles.xpReward}>
-          ⚡ +{lesson.xp} XP
+          {wasCompletedBefore
+            ? `⚡ ${lesson.xp} XP lesson reviewed`
+            : `⚡ +${lesson.xp} XP`}
         </Text>
 
         <TouchableOpacity
@@ -123,29 +188,29 @@ if (!lesson) {
     );
   }
 
+  if (!step) return null;
+
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
     >
-      {/* Exit lesson */}
       <TouchableOpacity onPress={exitLesson}>
         <Text style={styles.backButton}>
           ← Exit Lesson
         </Text>
       </TouchableOpacity>
 
-      {/* Lesson information */}
       <Text style={styles.chapterLabel}>
-        {lesson.world.toUpperCase()} · {lesson.chapter.toUpperCase()}
+        {lesson.world.toUpperCase()} ·{" "}
+        {lesson.chapter.toUpperCase()}
       </Text>
 
-      {/* Progress bar */}
       <View style={styles.progressTrack}>
         <View
           style={[
             styles.progressFill,
-            { width: `${progress}%` },
+            { width: `${progress}%` as `${number}%` },
           ]}
         />
       </View>
@@ -163,11 +228,7 @@ if (!lesson) {
         </Text>
 
         <View style={styles.languageToggle}>
-          {[
-            { label: "Pseudocode", value: "pseudo" },
-            { label: "C", value: "c" },
-            { label: "C++", value: "cpp" },
-          ].map((option) => (
+          {languages.map((option) => (
             <TouchableOpacity
               key={option.value}
               style={[
@@ -175,9 +236,7 @@ if (!lesson) {
                 language === option.value &&
                   styles.activeLanguageOption,
               ]}
-              onPress={() =>
-                setLanguage(option.value as CodeLanguage)
-              }
+              onPress={() => changeLanguage(option.value)}
             >
               <Text
                 style={[
@@ -205,7 +264,6 @@ if (!lesson) {
       {/* Ordering exercise */}
       {isOrdering && (
         <View>
-          {/* Code example */}
           {lesson.codeExamples && (
             <View style={styles.codeContainer}>
               <Text style={styles.codeLabel}>
@@ -285,15 +343,25 @@ if (!lesson) {
           )}
 
           {checked && (
-            <View style={styles.feedback}>
+            <View
+              style={[
+                styles.feedback,
+                isCorrect
+                  ? styles.correctFeedback
+                  : styles.incorrectFeedback,
+              ]}
+            >
               <Text style={styles.feedbackTitle}>
-                {orderingIsCorrect
+                {isCorrect
                   ? "Correct! 🎉"
                   : "Not quite! 💡"}
               </Text>
 
               <Text style={styles.feedbackText}>
-                {step.explanation}
+                {isCorrect
+                  ? step.explanation ??
+                    "Great job putting the steps in order!"
+                  : "The sequence isn't quite right. Think about which instruction needs to happen first, then try again."}
               </Text>
             </View>
           )}
@@ -311,7 +379,7 @@ if (!lesson) {
             const isSelected =
               selectedAnswer === index;
 
-            const isCorrect =
+            const isCorrectOption =
               step.correctAnswer === index;
 
             return (
@@ -320,19 +388,17 @@ if (!lesson) {
                 disabled={checked}
                 style={[
                   styles.option,
-                  isSelected &&
-                    styles.selectedOption,
+                  isSelected && styles.selectedOption,
                   checked &&
                     isCorrect &&
+                    isCorrectOption &&
                     styles.correctOption,
                   checked &&
-                    isSelected &&
                     !isCorrect &&
+                    isSelected &&
                     styles.incorrectOption,
                 ]}
-                onPress={() =>
-                  setSelectedAnswer(index)
-                }
+                onPress={() => setSelectedAnswer(index)}
               >
                 <Text style={styles.optionText}>
                   {option}
@@ -342,15 +408,25 @@ if (!lesson) {
           })}
 
           {checked && (
-            <View style={styles.feedback}>
+            <View
+              style={[
+                styles.feedback,
+                isCorrect
+                  ? styles.correctFeedback
+                  : styles.incorrectFeedback,
+              ]}
+            >
               <Text style={styles.feedbackTitle}>
-                {answerIsCorrect
+                {isCorrect
                   ? "Correct! 🎉"
                   : "Not quite! 💡"}
               </Text>
 
               <Text style={styles.feedbackText}>
-                {step.explanation}
+                {isCorrect
+                  ? step.explanation ??
+                    "Great job! You got it right."
+                  : "That isn't the correct answer. Review the question and try another option."}
               </Text>
             </View>
           )}
@@ -371,33 +447,31 @@ if (!lesson) {
         <TouchableOpacity
           style={[
             styles.button,
-            (isOrdering
-              ? selectedOrder.length !==
-                currentOrderingOptions.length ||
-                currentOrderingOptions.length === 0
-              : selectedAnswer === null) &&
-              styles.disabledButton,
+            !canCheck && styles.disabledButton,
           ]}
-          disabled={
-            isOrdering
-              ? selectedOrder.length !==
-                  currentOrderingOptions.length ||
-                currentOrderingOptions.length === 0
-              : selectedAnswer === null
-          }
+          disabled={!canCheck}
           onPress={() => setChecked(true)}
         >
           <Text style={styles.buttonText}>
             Check Answer
           </Text>
         </TouchableOpacity>
-      ) : (
+      ) : isCorrect ? (
         <TouchableOpacity
           style={styles.button}
           onPress={nextStep}
         >
           <Text style={styles.buttonText}>
             Continue →
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={styles.retryButton}
+          onPress={retryAnswer}
+        >
+          <Text style={styles.retryButtonText}>
+            ↻ Try Again
           </Text>
         </TouchableOpacity>
       )}
@@ -494,10 +568,15 @@ const styles = StyleSheet.create({
     color: "#392653",
   },
   feedback: {
-    backgroundColor: "#F0E8FF",
     padding: 18,
     borderRadius: 16,
     marginTop: 12,
+  },
+  correctFeedback: {
+    backgroundColor: "#E6F8EF",
+  },
+  incorrectFeedback: {
+    backgroundColor: "#FDECEC",
   },
   feedbackTitle: {
     fontSize: 18,
@@ -522,6 +601,20 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "800",
+  },
+  retryButton: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#9162E4",
+    borderWidth: 2,
+    borderRadius: 16,
+    padding: 18,
+    alignItems: "center",
+    marginTop: 30,
+  },
+  retryButtonText: {
+    color: "#9162E4",
     fontSize: 16,
     fontWeight: "800",
   },
