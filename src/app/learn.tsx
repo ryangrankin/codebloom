@@ -1,4 +1,4 @@
-
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
     ScrollView,
@@ -91,6 +91,8 @@ const chapters = [
 ];
 
 export default function LearnScreen() {
+  const router = useRouter();
+  
   const [expandedChapter, setExpandedChapter] =
     useState<number | null>(0);
 
@@ -157,7 +159,9 @@ export default function LearnScreen() {
                     key={lessonIndex}
                     style={styles.lessonRow}
                     onPress={() => {
-                      // Lesson navigation comes next.
+                      if (chapterIndex === 0 && lessonIndex === 0){
+                        router.push("/lesson");
+                      }
                     }}
                   >
                     <View style={styles.lessonCircle}>

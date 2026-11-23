@@ -12,6 +12,7 @@ export default function AppTabs() {
       backgroundColor={colors.background}
       indicatorColor={colors.backgroundElement}
       labelStyle={{ selected: { color: colors.text } }}>
+      //home 
       <NativeTabs.Trigger name="index">
         <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
@@ -19,7 +20,7 @@ export default function AppTabs() {
           renderingMode="template"
         />
       </NativeTabs.Trigger>
-
+      //explore trigger
       <NativeTabs.Trigger name="explore">
         <NativeTabs.Trigger.Label>Explore</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
@@ -27,6 +28,7 @@ export default function AppTabs() {
           renderingMode="template"
         />
       </NativeTabs.Trigger>
+      //learn trigger
       <NativeTabs.Trigger name="learn">
         <NativeTabs.Trigger.Label>Learn</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
@@ -34,6 +36,12 @@ export default function AppTabs() {
            renderingMode="template"
         />
       </NativeTabs.Trigger>
+      
+      //lesson trigger
+      <NativeTabs.Trigger name="lesson">
+        <NativeTabs.Trigger.Label hidden />
+      </NativeTabs.Trigger>
+
     </NativeTabs>
   );
 }
