@@ -50,26 +50,26 @@ export const arithmeticOperators: Lesson = {
     },
     {
       "type": "code-input",
-      "title": "Practice Again",
-      "question": "Write one statement that stores a + b in total. All variables already exist.",
+      "title": "Apply What You Learned",
+      "question": "The variables width, height, and area already exist. Store width multiplied by height in area.",
       "codePrompt": {
-        "pseudo": "// Write the expression independently",
-        "c": "// Write the expression independently",
-        "cpp": "// Write the expression independently"
+        "pseudo": "// Write your pseudocode solution",
+        "c": "// Write your C solution",
+        "cpp": "// Write your C++ solution"
       },
       "acceptedAnswers": {
         "pseudo": [
-          "SET total = a + b",
-          "total = a + b"
+          "SET area = width * height",
+          "area = width * height"
         ],
         "c": [
-          "total = a + b;"
+          "area = width * height;"
         ],
         "cpp": [
-          "total = a + b;"
+          "area = width * height;"
         ]
       },
-      "explanation": "Nice work! Practice helps build fluency."
+      "explanation": "Multiplication lets us calculate the area of a rectangle."
     }
   ],
   "codeExamples": {

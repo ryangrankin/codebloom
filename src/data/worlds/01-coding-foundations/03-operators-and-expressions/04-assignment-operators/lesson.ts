@@ -50,26 +50,26 @@ export const assignmentOperators: Lesson = {
     },
     {
       "type": "code-input",
-      "title": "Practice Again",
-      "question": "Increase the existing variable score by 10 using an assignment operator.",
+      "title": "Apply What You Learned",
+      "question": "The variable lives already exists. The player loses one life. Update lives using the -= operator in C or C++.",
       "codePrompt": {
-        "pseudo": "// Write the expression independently",
-        "c": "// Write the expression independently",
-        "cpp": "// Write the expression independently"
+        "pseudo": "// Write your pseudocode solution",
+        "c": "// Write your C solution",
+        "cpp": "// Write your C++ solution"
       },
       "acceptedAnswers": {
         "pseudo": [
-          "SET score = score + 10",
-          "score = score + 10"
+          "SET lives = lives - 1",
+          "lives = lives - 1"
         ],
         "c": [
-          "score += 10;"
+          "lives -= 1;"
         ],
         "cpp": [
-          "score += 10;"
+          "lives -= 1;"
         ]
       },
-      "explanation": "Nice work! Practice helps build fluency."
+      "explanation": "The -= operator subtracts a value from an existing variable."
     }
   ],
   "codeExamples": {

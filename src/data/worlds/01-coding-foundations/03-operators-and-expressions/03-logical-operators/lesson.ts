@@ -52,28 +52,28 @@ export const logicalOperators: Lesson = {
     },
     {
       "type": "code-input",
-      "title": "Practice Again",
-      "question": "Set the existing variable allowed to true only when age >= 18 AND hasTicket is true.",
+      "title": "Apply What You Learned",
+      "question": "The variables isWeekend, isHoliday, and dayOff already exist. Set dayOff to true when it is the weekend OR a holiday.",
       "codePrompt": {
-        "pseudo": "// Write the expression independently",
-        "c": "// Write the expression independently",
-        "cpp": "// Write the expression independently"
+        "pseudo": "// Write your pseudocode solution",
+        "c": "// Write your C solution",
+        "cpp": "// Write your C++ solution"
       },
       "acceptedAnswers": {
         "pseudo": [
-          "SET allowed = age >= 18 AND hasTicket",
-          "allowed = age >= 18 AND hasTicket"
+          "SET dayOff = isWeekend OR isHoliday",
+          "dayOff = isWeekend OR isHoliday"
         ],
         "c": [
-          "allowed = age >= 18 && hasTicket;",
-          "allowed = (age >= 18) && hasTicket;"
+          "dayOff = isWeekend || isHoliday;",
+          "dayOff = (isWeekend || isHoliday);"
         ],
         "cpp": [
-          "allowed = age >= 18 && hasTicket;",
-          "allowed = (age >= 18) && hasTicket;"
+          "dayOff = isWeekend || isHoliday;",
+          "dayOff = (isWeekend || isHoliday);"
         ]
       },
-      "explanation": "Nice work! Practice helps build fluency."
+      "explanation": "Logical OR is true when at least one condition is true."
     }
   ],
   "codeExamples": {

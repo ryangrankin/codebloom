@@ -50,26 +50,26 @@ export const orderOfOperations: Lesson = {
     },
     {
       "type": "code-input",
-      "title": "Practice Again",
-      "question": "Set the existing variable result to the sum of a and b, multiplied by c. Use parentheses.",
+      "title": "Apply What You Learned",
+      "question": "The variables subtotal, tax, and total already exist. Set total to subtotal multiplied by (1 + tax). Use parentheses.",
       "codePrompt": {
-        "pseudo": "// Write the expression independently",
-        "c": "// Write the expression independently",
-        "cpp": "// Write the expression independently"
+        "pseudo": "// Write your pseudocode solution",
+        "c": "// Write your C solution",
+        "cpp": "// Write your C++ solution"
       },
       "acceptedAnswers": {
         "pseudo": [
-          "SET result = (a + b) * c",
-          "result = (a + b) * c"
+          "SET total = subtotal * (1 + tax)",
+          "total = subtotal * (1 + tax)"
         ],
         "c": [
-          "result = (a + b) * c;"
+          "total = subtotal * (1 + tax);"
         ],
         "cpp": [
-          "result = (a + b) * c;"
+          "total = subtotal * (1 + tax);"
         ]
       },
-      "explanation": "Nice work! Practice helps build fluency."
+      "explanation": "Parentheses ensure the tax multiplier is calculated before multiplication."
     }
   ],
   "codeExamples": {

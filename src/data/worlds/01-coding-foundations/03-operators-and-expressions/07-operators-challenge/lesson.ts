@@ -50,26 +50,26 @@ export const operatorsChallenge: Lesson = {
     },
     {
       "type": "code-input",
-      "title": "Practice Again",
-      "question": "Store coins + levels * 10 in the existing variable score.",
+      "title": "Build a Two-Step Solution",
+      "question": "Final challenge! The variables coins, levels, score, and bonusScore already exist. Write TWO instructions: first calculate score as coins + levels * 10, then add 50 to score and store the result in bonusScore.",
       "codePrompt": {
-        "pseudo": "// Write the expression independently",
-        "c": "// Write the expression independently",
-        "cpp": "// Write the expression independently"
+        "pseudo": "// Write your pseudocode solution",
+        "c": "// Write your C solution",
+        "cpp": "// Write your C++ solution"
       },
       "acceptedAnswers": {
         "pseudo": [
-          "SET score = coins + levels * 10",
-          "score = coins + levels * 10"
+          "SET score = coins + levels * 10\nSET bonusScore = score + 50",
+          "score = coins + levels * 10\nbonusScore = score + 50"
         ],
         "c": [
-          "score = coins + levels * 10;"
+          "score = coins + levels * 10;\nbonusScore = score + 50;"
         ],
         "cpp": [
-          "score = coins + levels * 10;"
+          "score = coins + levels * 10;\nbonusScore = score + 50;"
         ]
       },
-      "explanation": "Nice work! Practice helps build fluency."
+      "explanation": "You combined arithmetic operators and used the result of one calculation in another!"
     }
   ],
   "codeExamples": {

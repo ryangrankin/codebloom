@@ -50,26 +50,26 @@ export const buildingExpressions: Lesson = {
     },
     {
       "type": "code-input",
-      "title": "Practice Again",
-      "question": "Set the existing variable total to price times quantity, minus discount.",
+      "title": "Apply What You Learned",
+      "question": "The variables hours, hourlyRate, bonus, and pay already exist. Calculate pay as hours times hourlyRate, plus bonus.",
       "codePrompt": {
-        "pseudo": "// Write the expression independently",
-        "c": "// Write the expression independently",
-        "cpp": "// Write the expression independently"
+        "pseudo": "// Write your pseudocode solution",
+        "c": "// Write your C solution",
+        "cpp": "// Write your C++ solution"
       },
       "acceptedAnswers": {
         "pseudo": [
-          "SET total = price * quantity - discount",
-          "total = price * quantity - discount"
+          "SET pay = hours * hourlyRate + bonus",
+          "pay = hours * hourlyRate + bonus"
         ],
         "c": [
-          "total = price * quantity - discount;"
+          "pay = hours * hourlyRate + bonus;"
         ],
         "cpp": [
-          "total = price * quantity - discount;"
+          "pay = hours * hourlyRate + bonus;"
         ]
       },
-      "explanation": "Nice work! Practice helps build fluency."
+      "explanation": "This expression combines multiplication and addition to calculate pay."
     }
   ],
   "codeExamples": {

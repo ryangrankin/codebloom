@@ -52,28 +52,28 @@ export const comparisonOperators: Lesson = {
     },
     {
       "type": "code-input",
-      "title": "Practice Again",
-      "question": "Store whether age is at least 18 in the existing variable eligible. Both variables already exist.",
+      "title": "Apply What You Learned",
+      "question": "The variables temperature and isFreezing already exist. Set isFreezing to whether temperature is less than or equal to 0.",
       "codePrompt": {
-        "pseudo": "// Write the expression independently",
-        "c": "// Write the expression independently",
-        "cpp": "// Write the expression independently"
+        "pseudo": "// Write your pseudocode solution",
+        "c": "// Write your C solution",
+        "cpp": "// Write your C++ solution"
       },
       "acceptedAnswers": {
         "pseudo": [
-          "SET eligible = age >= 18",
-          "eligible = age >= 18"
+          "SET isFreezing = temperature <= 0",
+          "isFreezing = temperature <= 0"
         ],
         "c": [
-          "eligible = age >= 18;",
-          "eligible = (age >= 18);"
+          "isFreezing = temperature <= 0;",
+          "isFreezing = (temperature <= 0);"
         ],
         "cpp": [
-          "eligible = age >= 18;",
-          "eligible = (age >= 18);"
+          "isFreezing = temperature <= 0;",
+          "isFreezing = (temperature <= 0);"
         ]
       },
-      "explanation": "Nice work! Practice helps build fluency."
+      "explanation": "The <= operator checks whether a value is less than or equal to another."
     }
   ],
   "codeExamples": {
