@@ -160,6 +160,15 @@ const progressPercent = (completedCount / totalLessons) * 100;
       style={styles.container}
       contentContainerStyle={styles.content}
     >
+        <TouchableOpacity
+  style={styles.dashboardButton}
+  onPress={() => router.replace("/")}
+  accessibilityRole="button"
+>
+  <Text style={styles.dashboardButtonText}>
+    ← home
+  </Text>
+</TouchableOpacity>
       <Text style={styles.worldLabel}>WORLD 01</Text>
 
       <Text style={styles.title}>🌱 Coding Foundations</Text>
@@ -456,5 +465,19 @@ const styles = StyleSheet.create({
   color: "#3B9B75",
   fontWeight: "800",
   fontSize: 17,
+},
+dashboardButton: {
+  alignSelf: "flex-start",
+  backgroundColor: "#F3EAFF",
+  paddingHorizontal: 16,
+  paddingVertical: 10,
+  borderRadius: 12,
+  marginBottom: 20,
+},
+
+dashboardButtonText: {
+  color: "#9162E4",
+  fontSize: 15,
+  fontWeight: "700",
 },
 });
