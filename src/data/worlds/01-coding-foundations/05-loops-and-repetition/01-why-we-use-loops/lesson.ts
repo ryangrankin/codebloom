@@ -47,6 +47,37 @@ export const whyWeUseLoops: Lesson = {
       },
       "explanation": "Great work! Your loop is correct."
     },
+
+{
+  type: "code-builder",
+  title: "Build a Countdown! 🚀",
+  question:
+    "A rocket needs to count down from 5 to 1 before launch. Arrange the code blocks to create a loop that displays each number, then prints 'Blast off!' after the loop finishes.",
+  codeBlocks: {
+    pseudo: [
+      'DISPLAY "Blast off!"',
+      "END FOR",
+      "DISPLAY i",
+      "FOR i = 5 DOWNTO 1",
+    ],
+    c: [
+      'printf("Blast off!");',
+      "}",
+      'printf("%d\\n", i);',
+      "for (int i = 5; i >= 1; i--) {",
+    ],
+    cpp: [
+      'cout << "Blast off!";',
+      "}",
+      "cout << i << endl;",
+      "for (int i = 5; i >= 1; i--) {",
+    ],
+  },
+  correctBlockOrder: [3, 2, 1, 0],
+  explanation:
+    "The loop starts at 5, decreases the counter by 1 each time, and stops after displaying 1. Once the loop finishes, the program displays 'Blast off!' exactly once!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

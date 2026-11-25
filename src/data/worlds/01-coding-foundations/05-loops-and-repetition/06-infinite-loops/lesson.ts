@@ -47,6 +47,43 @@ export const infiniteLoops: Lesson = {
       },
       "explanation": "Great work! Your loop is correct."
     },
+
+{
+  type: "code-builder",
+  title: "Fix the Robot's Infinite Loop! 🤖",
+  question:
+    "A robot has 5 units of battery remaining. It uses 1 unit each time it moves. Arrange the blocks so the robot moves while it has battery, decreases its battery after every move, and stops when the battery reaches 0.",
+  codeBlocks: {
+    pseudo: [
+      'DISPLAY "Robot stopped!"',
+      "END WHILE",
+      "SET battery = battery - 1",
+      'DISPLAY "Robot moving!"',
+      "WHILE battery > 0",
+      "SET battery = 5",
+    ],
+    c: [
+      'printf("Robot stopped!");',
+      "}",
+      "battery--;",
+      'printf("Robot moving!\\n");',
+      "while (battery > 0) {",
+      "int battery = 5;",
+    ],
+    cpp: [
+      'cout << "Robot stopped!";',
+      "}",
+      "battery--;",
+      'cout << "Robot moving!" << endl;',
+      "while (battery > 0) {",
+      "int battery = 5;",
+    ],
+  },
+  correctBlockOrder: [5, 4, 3, 2, 1, 0],
+  explanation:
+    "The robot starts with 5 battery units. Each time the loop runs, it moves and loses 1 battery unit. When battery reaches 0, the condition battery > 0 becomes false and the loop stops. Without battery--, the robot would keep moving forever!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

@@ -49,6 +49,43 @@ export const whileLoops: Lesson = {
       },
       "explanation": "Great work! Your loop is correct."
     },
+
+{
+  type: "code-builder",
+  title: "Build a Game Over Countdown! 🎮",
+  question:
+    "A player starts with 3 lives. Each round, the game displays how many lives remain and removes one life. Arrange the blocks to repeat until no lives remain, then display 'Game Over!'.",
+  codeBlocks: {
+    pseudo: [
+      'DISPLAY "Game Over!"',
+      "END WHILE",
+      "SET lives = lives - 1",
+      "DISPLAY lives",
+      "WHILE lives > 0",
+      "SET lives = 3",
+    ],
+    c: [
+      'printf("Game Over!");',
+      "}",
+      "lives--;",
+      'printf("%d\\n", lives);',
+      "while (lives > 0) {",
+      "int lives = 3;",
+    ],
+    cpp: [
+      'cout << "Game Over!";',
+      "}",
+      "lives--;",
+      "cout << lives << endl;",
+      "while (lives > 0) {",
+      "int lives = 3;",
+    ],
+  },
+  correctBlockOrder: [5, 4, 3, 2, 1, 0],
+  explanation:
+    "The loop starts with 3 lives. Each repetition displays the remaining lives and subtracts 1. When lives reaches 0, the condition becomes false, the loop stops, and 'Game Over!' appears.",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

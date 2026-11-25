@@ -47,6 +47,37 @@ export const loopCounters: Lesson = {
       },
       "explanation": "Great work! Your loop is correct."
     },
+
+{
+  type: "code-builder",
+  title: "Build a Step Counter! 👟",
+  question:
+    "A fitness tracker records steps in groups of 2. Arrange the blocks to display 2, 4, 6, 8, and 10, then display 'Goal reached!' after the loop finishes.",
+  codeBlocks: {
+    pseudo: [
+      'DISPLAY "Goal reached!"',
+      "END FOR",
+      "DISPLAY steps",
+      "FOR steps = 2 TO 10 STEP 2",
+    ],
+    c: [
+      'printf("Goal reached!");',
+      "}",
+      'printf("%d\\n", steps);',
+      "for (int steps = 2; steps <= 10; steps += 2) {",
+    ],
+    cpp: [
+      'cout << "Goal reached!";',
+      "}",
+      "cout << steps << endl;",
+      "for (int steps = 2; steps <= 10; steps += 2) {",
+    ],
+  },
+  correctBlockOrder: [3, 2, 1, 0],
+  explanation:
+    "The loop starts at 2 and increases the counter by 2 each time. It displays 2, 4, 6, 8, and 10. Once the counter reaches 12, the condition becomes false, and the program displays 'Goal reached!' once.",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

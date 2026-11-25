@@ -47,6 +47,46 @@ export const numberPatterns: Lesson = {
       },
       "explanation": "Great work! Your loop is correct."
     },
+
+{
+  type: "code-builder",
+  title: "Build a Square Number Calculator! 🔢",
+  question:
+    "A math game needs to calculate the squares of numbers 1 through 5 and add them together. Arrange the blocks to calculate each square, display it, add it to the running total, and display the final sum.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY total",
+      "END FOR",
+      "SET total = total + square",
+      "DISPLAY square",
+      "SET square = i * i",
+      "FOR i = 1 TO 5",
+      "SET total = 0",
+    ],
+    c: [
+      'printf("%d", total);',
+      "}",
+      "total += square;",
+      'printf("%d\\n", square);',
+      "int square = i * i;",
+      "for (int i = 1; i <= 5; i++) {",
+      "int total = 0;",
+    ],
+    cpp: [
+      "cout << total;",
+      "}",
+      "total += square;",
+      "cout << square << endl;",
+      "int square = i * i;",
+      "for (int i = 1; i <= 5; i++) {",
+      "int total = 0;",
+    ],
+  },
+  correctBlockOrder: [6, 5, 4, 3, 2, 1, 0],
+  explanation:
+    "The loop calculates each square: 1, 4, 9, 16, and 25. Each value is displayed and added to total. After all five repetitions, the program displays the final sum of 55. This combines loop counters, multiplication, and running totals!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

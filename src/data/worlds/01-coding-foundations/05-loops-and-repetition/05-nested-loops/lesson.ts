@@ -47,6 +47,43 @@ export const nestedLoops: Lesson = {
       },
       "explanation": "Great work! Your loop is correct."
     },
+
+{
+  type: "code-builder",
+  title: "Build a Pixel Art Grid! 🎨",
+  question:
+    "A pixel artist wants to create a 3×3 grid of stars. Arrange the code blocks using nested loops to display three stars on each row, for three rows.",
+  codeBlocks: {
+    pseudo: [
+      "END FOR",
+      "END FOR",
+      'DISPLAY "*" WITHOUT NEWLINE',
+      "FOR col = 1 TO 3",
+      "DISPLAY NEWLINE",
+      "FOR row = 1 TO 3",
+    ],
+    c: [
+      "}",
+      "}",
+      'printf("*");',
+      "for (int col = 1; col <= 3; col++) {",
+      'printf("\\n");',
+      "for (int row = 1; row <= 3; row++) {",
+    ],
+    cpp: [
+      "}",
+      "}",
+      'cout << "*";',
+      "for (int col = 1; col <= 3; col++) {",
+      "cout << endl;",
+      "for (int row = 1; row <= 3; row++) {",
+    ],
+  },
+  correctBlockOrder: [5, 3, 2, 1, 4, 0],
+  explanation:
+    "The outer loop runs 3 times to create 3 rows. For each row, the inner loop prints 3 stars. After the inner loop finishes, the program moves to a new line. This creates a 3×3 grid with 9 stars!",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",

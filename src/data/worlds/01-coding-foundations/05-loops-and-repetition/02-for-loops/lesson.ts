@@ -47,6 +47,40 @@ export const forLoops: Lesson = {
       },
       "explanation": "Great work! Your loop is correct."
     },
+
+{
+  type: "code-builder",
+  title: "Build a Game Score Calculator! 🎮",
+  question:
+    "A player completes 5 rounds of a game. In round 1 they earn 10 points, round 2 earns 20, and so on. Arrange the blocks to use a for loop to calculate and display the total score.",
+  codeBlocks: {
+    pseudo: [
+      "DISPLAY total",
+      "END FOR",
+      "SET total = total + i * 10",
+      "FOR i = 1 TO 5",
+      "SET total = 0",
+    ],
+    c: [
+      'printf("%d", total);',
+      "}",
+      "total += i * 10;",
+      "for (int i = 1; i <= 5; i++) {",
+      "int total = 0;",
+    ],
+    cpp: [
+      "cout << total;",
+      "}",
+      "total += i * 10;",
+      "for (int i = 1; i <= 5; i++) {",
+      "int total = 0;",
+    ],
+  },
+  correctBlockOrder: [4, 3, 2, 1, 0],
+  explanation:
+    "The loop runs 5 times, adding 10, 20, 30, 40, and 50 points. The total is 150! Instead of writing five separate additions, you used a loop to repeat the calculation.",
+},
+
     {
       "type": "code-input",
       "title": "Independent Challenge",
